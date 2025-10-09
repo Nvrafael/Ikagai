@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('role')->default('cliente'); // cliente, nutricionista, admin
+            $table->string('role')->default('client'); // roles: 'admin', 'nutritionist', 'client'
         });
     }
     
@@ -22,5 +22,6 @@ return new class extends Migration
             $table->dropColumn('role');
         });
     }
+    
     
 };
