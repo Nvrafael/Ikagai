@@ -1,4 +1,12 @@
 <x-guest-layout>
+    <div>
+        <label for="role">Rol:</label>
+        <select name="role" id="role" required class="border-gray-300 rounded-md">
+            <option value="cliente">Cliente</option>
+            <option value="nutricionista">Nutricionista</option>
+            <option value="admin">Administrador</option>
+        </select>
+    </div>
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
