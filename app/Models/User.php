@@ -60,4 +60,76 @@ class User extends Authenticatable
             ->map(fn ($word) => Str::substr($word, 0, 1))
             ->implode('');
     }
+
+    /**
+     * Relación con reseñas del usuario
+     */
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    /**
+     * Relación con reservas del usuario
+     */
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
+
+    /**
+     * Relación con pedidos del usuario
+     */
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    /**
+     * Relación con planes nutricionales del usuario
+     */
+    public function nutritionalPlans()
+    {
+        return $this->hasMany(NutritionalPlan::class);
+    }
+
+    /**
+     * Mensajes enviados por el usuario
+     */
+    public function sentMessages()
+    {
+        return $this->hasMany(Message::class, 'sender_id');
+    }
+
+    /**
+     * Mensajes recibidos por el usuario
+     */
+    public function receivedMessages()
+    {
+        return $this->hasMany(Message::class, 'receiver_id');
+    }
+
+    /**
+     * Verificar si el usuario es nutricionista
+     */
+    public function isNutritionist()
+    {
+        return $this->role === 'nutritionist';
+    }
+
+    /**
+     * Verificar si el usuario es cliente
+     */
+    public function isClient()
+    {
+        return $this->role === 'client';
+    }
+
+    /**
+     * Verificar si el usuario es administrador
+     */
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
 }
