@@ -15,7 +15,17 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ServiceController;
 
 Route::get('/', function () {
-    return view('welcome');
+    $featuredProducts = \App\Models\Product::where('is_featured', true)
+        ->where('is_active', true)
+        ->with('category')
+        ->take(3)
+        ->get();
+    
+    $nutritionists = \App\Models\User::where('role', 'nutritionist')
+        ->take(3)
+        ->get();
+    
+    return view('welcome', compact('featuredProducts', 'nutritionists'));
 });
 
 Route::get('/dashboard', function () {
