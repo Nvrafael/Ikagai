@@ -34,6 +34,11 @@ class OrderController extends Controller
 
         $order->load('items.product');
 
+        // Si es una petición AJAX, devolver HTML parcial
+        if (request()->wantsJson() || request()->ajax()) {
+            return view('admin.orders.details', compact('order'))->render();
+        }
+
         return view('orders.show', compact('order'));
     }
 
@@ -151,17 +156,17 @@ class OrderController extends Controller
         $query = Order::with('user');
 
         // Filtros
-        if ($request->has('status')) {
+        if ($request->has('status') && $request->status != '') {
             $query->where('status', $request->status);
         }
 
-        if ($request->has('search')) {
+        if ($request->has('search') && $request->search != '') {
             $query->where('order_number', 'like', '%' . $request->search . '%');
         }
 
         $orders = $query->orderBy('created_at', 'desc')->paginate(20);
 
-        return view('orders.admin-index', compact('orders'));
+        return view('admin.orders.index', compact('orders'));
     }
 }
 

@@ -52,7 +52,7 @@ class CategoryController extends Controller
 
         $category = Category::create($validated);
 
-        return redirect()->route('categories.show', $category)
+        return redirect()->route('admin.categories.index')
             ->with('success', 'Categoría creada exitosamente.');
     }
 
@@ -78,7 +78,7 @@ class CategoryController extends Controller
 
         $category->update($validated);
 
-        return redirect()->route('categories.show', $category)
+        return redirect()->route('admin.categories.index')
             ->with('success', 'Categoría actualizada exitosamente.');
     }
 
@@ -89,7 +89,7 @@ class CategoryController extends Controller
     {
         $category->delete();
 
-        return redirect()->route('categories.index')
+        return redirect()->route('admin.categories.index')
             ->with('success', 'Categoría eliminada exitosamente.');
     }
 }

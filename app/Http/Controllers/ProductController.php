@@ -14,8 +14,14 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Product::with('category')
-            ->where('is_active', true);
+        $query = Product::with('category');
+        
+        // Si es para el admin, mostrar todos los productos
+        if ($request->routeIs('admin.products.index')) {
+            // No filtrar por is_active
+        } else {
+            $query->where('is_active', true);
+        }
 
         // Filtrar por categoría
         if ($request->has('category')) {
@@ -37,6 +43,11 @@ class ProductController extends Controller
 
         $products = $query->paginate(12);
         $categories = Category::where('is_active', true)->get();
+
+        // Determinar la vista según la ruta
+        if ($request->routeIs('admin.products.index')) {
+            return view('admin.products.index', compact('products', 'categories'));
+        }
 
         return view('products.index', compact('products', 'categories'));
     }
@@ -91,7 +102,7 @@ class ProductController extends Controller
 
         $product = Product::create($validated);
 
-        return redirect()->route('products.show', $product)
+        return redirect()->route('admin.products.index')
             ->with('success', 'Producto creado exitosamente.');
     }
 
@@ -132,7 +143,7 @@ class ProductController extends Controller
 
         $product->update($validated);
 
-        return redirect()->route('products.show', $product)
+        return redirect()->route('admin.products.index')
             ->with('success', 'Producto actualizado exitosamente.');
     }
 
@@ -143,7 +154,7 @@ class ProductController extends Controller
     {
         $product->delete();
 
-        return redirect()->route('products.index')
+        return redirect()->route('admin.products.index')
             ->with('success', 'Producto eliminado exitosamente.');
     }
 }

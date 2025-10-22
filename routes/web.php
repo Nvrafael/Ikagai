@@ -126,12 +126,47 @@ Route::middleware(['auth', 'role:nutritionist,admin'])->prefix('nutricionista')-
 
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     
+    // Dashboard
+    Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+    
+    // Gestión de Usuarios
+    Route::get('/usuarios', [AdminController::class, 'users'])->name('admin.users.index');
+    Route::put('/usuarios/{user}/rol', [AdminController::class, 'updateUserRole'])->name('admin.users.update-role');
+    Route::delete('/usuarios/{user}', [AdminController::class, 'deleteUser'])->name('admin.users.destroy');
+    
+    // Gestión de Productos
+    Route::get('/productos', [ProductController::class, 'index'])->name('admin.products.index');
+    Route::get('/productos/crear', function() { return view('admin.products.create'); })->name('admin.products.create');
+    Route::post('/productos', [ProductController::class, 'store'])->name('admin.products.store');
+    Route::get('/productos/{product}/editar', function($id) { 
+        $product = \App\Models\Product::findOrFail($id);
+        $categories = \App\Models\Category::all();
+        return view('admin.products.edit', compact('product', 'categories')); 
+    })->name('admin.products.edit');
+    Route::put('/productos/{product}', [ProductController::class, 'update'])->name('admin.products.update');
+    Route::delete('/productos/{product}', [ProductController::class, 'destroy'])->name('admin.products.destroy');
+    
+    // Gestión de Categorías
+    Route::get('/categorias', function() {
+        $categories = \App\Models\Category::withCount('products')->paginate(20);
+        return view('admin.categories.index', compact('categories'));
+    })->name('admin.categories.index');
+    Route::post('/categorias', [CategoryController::class, 'store'])->name('admin.categories.store');
+    Route::put('/categorias/{category}', [CategoryController::class, 'update'])->name('admin.categories.update');
+    Route::delete('/categorias/{category}', [CategoryController::class, 'destroy'])->name('admin.categories.destroy');
+    
     // Gestión de Pedidos
     Route::get('/pedidos', [OrderController::class, 'adminIndex'])->name('admin.orders.index');
+    Route::get('/pedidos/{order}', [OrderController::class, 'show'])->name('admin.orders.show');
     Route::put('/pedidos/{order}/estado', [OrderController::class, 'updateStatus'])->name('admin.orders.update-status');
 
     // Gestión de Reseñas
+    Route::get('/resenas', function() {
+        $reviews = \App\Models\Review::with(['user', 'product'])->orderBy('created_at', 'desc')->paginate(20);
+        return view('admin.reviews.index', compact('reviews'));
+    })->name('admin.reviews.index');
     Route::post('/resenas/{review}/aprobar', [ReviewController::class, 'approve'])->name('admin.reviews.approve');
+    Route::delete('/resenas/{review}', [ReviewController::class, 'destroy'])->name('admin.reviews.destroy');
 });
 
 require __DIR__.'/auth.php';
