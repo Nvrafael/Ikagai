@@ -203,21 +203,12 @@
                         </p>
                         
                         <!-- Botón -->
-                        @auth
-                            <a href="{{ route('messages.new-conversation') }}" class="inline-flex items-center text-black hover:text-gray-600 text-sm font-medium border-b border-black hover:border-gray-600 transition-colors duration-200">
-                                Contactar
-                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                                </svg>
-                            </a>
-                        @else
-                            <a href="{{ route('login') }}" class="inline-flex items-center text-black hover:text-gray-600 text-sm font-medium border-b border-black hover:border-gray-600 transition-colors duration-200">
-                                Iniciar sesión
-                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                                </svg>
-                            </a>
-                        @endauth
+                        <a href="{{ route('nutritionist.profile') }}" class="inline-flex items-center text-black hover:text-gray-600 text-sm font-medium border-b border-black hover:border-gray-600 transition-colors duration-200">
+                            Ver perfil
+                            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </a>
                     </div>
                 @empty
                     <div class="col-span-full text-center py-24 border border-gray-200 bg-white">
