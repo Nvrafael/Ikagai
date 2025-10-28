@@ -15,11 +15,29 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ServiceController;
 
 Route::get('/', function () {
-    return view('welcome');
+    $featuredProducts = \App\Models\Product::where('is_featured', true)
+        ->where('is_active', true)
+        ->with('category')
+        ->take(3)
+        ->get();
+    
+    $nutritionists = \App\Models\User::where('role', 'nutritionist')
+        ->take(3)
+        ->get();
+    
+    return view('welcome', compact('featuredProducts', 'nutritionists'));
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $user = auth()->user();
+    
+    // Redirigir según el rol del usuario
+    return match ($user->role) {
+        'admin' => redirect()->route('admin.dashboard'),
+        'nutritionist' => redirect()->route('nutritionist.dashboard'),
+        'client' => redirect()->route('client.dashboard'),
+        default => view('dashboard')
+    };
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -28,10 +46,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware(['auth', 'role:admin'])->get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
-
-Route::middleware(['auth', 'role:nutritionist'])->get('/nutritionist/dashboard', [NutritionistController::class, 'index'])->name('nutritionist.dashboard');
-
+// Dashboard para clientes
 Route::middleware(['auth', 'role:client'])->get('/client/dashboard', [ClientController::class, 'index'])->name('client.dashboard');
 
 // ==========================================
@@ -92,6 +107,9 @@ Route::middleware(['auth'])->group(function () {
 // ==========================================
 
 Route::middleware(['auth', 'role:nutritionist,admin'])->prefix('nutricionista')->group(function () {
+    
+    // Dashboard
+    Route::get('/dashboard', [NutritionistController::class, 'index'])->name('nutritionist.dashboard');
     
     // Gestión de Servicios
     Route::post('/servicios', [ServiceController::class, 'store'])->name('nutritionist.services.store');

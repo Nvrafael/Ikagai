@@ -1,60 +1,108 @@
 <x-guest-layout>
-    <div>
-        <label for="role">Rol:</label>
-        <select name="role" id="role" required class="border-gray-300 rounded-md">
-            <option value="cliente">Cliente</option>
-            <option value="nutricionista">Nutricionista</option>
-            <option value="admin">Administrador</option>
-        </select>
+    <!-- Title -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-light text-black mb-2 tracking-tight">Crear cuenta</h1>
+        <p class="text-sm text-gray-500">Únete a la comunidad IKIGAI</p>
     </div>
-    <form method="POST" action="{{ route('register') }}">
+
+    <form method="POST" action="{{ route('register') }}" class="space-y-6">
         @csrf
+
+        <!-- Hidden Role Field - Always client -->
+        <input type="hidden" name="role" value="client">
 
         <!-- Name -->
         <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+            <label for="name" class="block text-sm font-medium text-black mb-2">
+                Nombre completo
+            </label>
+            <input 
+                id="name" 
+                type="text" 
+                name="name" 
+                value="{{ old('name') }}"
+                required 
+                autofocus 
+                autocomplete="name"
+                class="w-full px-4 py-3 border border-gray-200 focus:border-black focus:outline-none transition-colors duration-200 text-sm @error('name') border-red-500 @enderror"
+                placeholder="Tu nombre completo"
+            />
+            @error('name')
+                <span class="block mt-1 text-xs text-red-600">{{ $message }}</span>
+            @enderror
         </div>
 
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+        <!-- Email -->
+        <div>
+            <label for="email" class="block text-sm font-medium text-black mb-2">
+                Email
+            </label>
+            <input 
+                id="email" 
+                type="email" 
+                name="email" 
+                value="{{ old('email') }}"
+                required 
+                autocomplete="username"
+                class="w-full px-4 py-3 border border-gray-200 focus:border-black focus:outline-none transition-colors duration-200 text-sm @error('email') border-red-500 @enderror"
+                placeholder="tu@email.com"
+            />
+            @error('email')
+                <span class="block mt-1 text-xs text-red-600">{{ $message }}</span>
+            @enderror
         </div>
 
         <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        <div>
+            <label for="password" class="block text-sm font-medium text-black mb-2">
+                Contraseña
+            </label>
+            <input 
+                id="password" 
+                type="password" 
+                name="password"
+                required 
+                autocomplete="new-password"
+                class="w-full px-4 py-3 border border-gray-200 focus:border-black focus:outline-none transition-colors duration-200 text-sm @error('password') border-red-500 @enderror"
+                placeholder="Mínimo 8 caracteres"
+            />
+            @error('password')
+                <span class="block mt-1 text-xs text-red-600">{{ $message }}</span>
+            @enderror
         </div>
 
         <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+        <div>
+            <label for="password_confirmation" class="block text-sm font-medium text-black mb-2">
+                Confirmar contraseña
+            </label>
+            <input 
+                id="password_confirmation" 
+                type="password" 
+                name="password_confirmation"
+                required 
+                autocomplete="new-password"
+                class="w-full px-4 py-3 border border-gray-200 focus:border-black focus:outline-none transition-colors duration-200 text-sm"
+                placeholder="Repite tu contraseña"
+            />
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
-            </a>
+        <!-- Submit Button -->
+        <button 
+            type="submit"
+            class="w-full bg-black text-white hover:bg-gray-900 px-6 py-4 text-sm font-medium transition-colors duration-200"
+        >
+            Crear cuenta
+        </button>
 
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
+        <!-- Login Link -->
+        <div class="text-center pt-6 border-t border-gray-100">
+            <p class="text-sm text-gray-500">
+                ¿Ya tienes cuenta?
+                <a href="{{ route('login') }}" class="text-black hover:text-gray-600 border-b border-black hover:border-gray-600 transition-colors duration-200 ml-1">
+                    Inicia sesión
+                </a>
+            </p>
         </div>
     </form>
 </x-guest-layout>
