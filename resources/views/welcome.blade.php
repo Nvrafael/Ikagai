@@ -48,9 +48,12 @@
                 <!-- Auth Buttons -->
                 <div class="flex items-center space-x-6">
                     @auth
-                        <a href="{{ url('/dashboard') }}" class="text-sm text-gray-600 hover:text-black transition-colors duration-200">
-                            Dashboard
-                        </a>
+                        <form method="POST" action="{{ route('logout') }}" class="inline">
+                            @csrf
+                            <button type="submit" class="text-sm text-gray-600 hover:text-black transition-colors duration-200">
+                                Cerrar sesión
+                            </button>
+                        </form>
                     @else
                         <a href="{{ route('login') }}" class="text-sm text-gray-600 hover:text-black transition-colors duration-200">
                             Iniciar sesión
