@@ -38,7 +38,8 @@ class BookingController extends Controller
         $validated = $request->validate([
             'service_id' => 'required|exists:services,id',
             'scheduled_at' => 'required|date|after:now',
-            'notes' => 'nullable|string',
+            'phone' => 'nullable|string|max:20',
+            'notes' => 'required|string|min:20',
         ]);
 
         $service = Service::findOrFail($validated['service_id']);
@@ -52,13 +53,20 @@ class BookingController extends Controller
             return back()->with('error', 'Este horario ya está reservado. Por favor, elige otro.');
         }
 
+        // Añadir información del usuario y precio
         $validated['user_id'] = Auth::id();
         $validated['price'] = $service->price;
+        
+        // Si se proporcionó teléfono, añadirlo a las notas
+        if (!empty($validated['phone'])) {
+            $validated['notes'] = "Teléfono: " . $validated['phone'] . "\n\n" . $validated['notes'];
+            unset($validated['phone']);
+        }
 
         $booking = Booking::create($validated);
 
-        return redirect()->route('bookings.show', $booking)
-            ->with('success', 'Reserva creada exitosamente. Te contactaremos pronto para confirmar.');
+        return redirect()->back()
+            ->with('success', 'Reserva creada exitosamente. Te contactaremos pronto para confirmar tu cita.');
     }
 
     /**

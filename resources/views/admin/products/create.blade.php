@@ -37,7 +37,7 @@
                 <label class="block text-sm font-medium text-black mb-2">Categoría *</label>
                 <select name="category_id" class="w-full px-4 py-3 border border-gray-200 focus:border-black focus:outline-none transition-colors duration-200" required>
                     <option value="">Selecciona una categoría</option>
-                    @foreach(\App\Models\Category::all() as $category)
+                    @foreach($categories as $category)
                         <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
                             {{ $category->name }}
                         </option>

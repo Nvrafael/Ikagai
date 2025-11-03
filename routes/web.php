@@ -65,6 +65,15 @@ Route::get('/productos/{product:slug}', [ProductController::class, 'show'])->nam
 Route::get('/servicios', [ServiceController::class, 'index'])->name('services.index');
 Route::get('/servicios/{service:slug}', [ServiceController::class, 'show'])->name('services.show');
 
+// Página del nutricionista
+Route::get('/nutricionista', function() {
+    // Obtener el primer servicio de consulta nutricional o crear uno por defecto
+    $service = \App\Models\Service::where('is_active', true)->first() 
+        ?? new \App\Models\Service(['id' => 1, 'name' => 'Consulta Nutricional', 'price' => 50]);
+    
+    return view('nutricionista', compact('service'));
+})->name('nutritionist.profile');
+
 // ==========================================
 // RUTAS AUTENTICADAS (requieren login)
 // ==========================================
@@ -154,7 +163,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     
     // Gestión de Productos
     Route::get('/productos', [ProductController::class, 'index'])->name('admin.products.index');
-    Route::get('/productos/crear', function() { return view('admin.products.create'); })->name('admin.products.create');
+    Route::get('/productos/crear', [ProductController::class, 'create'])->name('admin.products.create');
     Route::post('/productos', [ProductController::class, 'store'])->name('admin.products.store');
     Route::get('/productos/{product}/editar', function($id) { 
         $product = \App\Models\Product::findOrFail($id);

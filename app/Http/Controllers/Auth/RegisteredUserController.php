@@ -46,6 +46,7 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        // Redirigir a los clientes a la página principal en lugar del dashboard
+        return redirect('/')->with('success', '¡Bienvenido a IKIGAI! Tu cuenta ha sido creada exitosamente.');
     }
 }

@@ -48,9 +48,12 @@
                 <!-- Auth Buttons -->
                 <div class="flex items-center space-x-6">
                     @auth
-                        <a href="{{ url('/dashboard') }}" class="text-sm text-gray-600 hover:text-black transition-colors duration-200">
-                            Dashboard
-                        </a>
+                        <form method="POST" action="{{ route('logout') }}" class="inline">
+                            @csrf
+                            <button type="submit" class="text-sm text-gray-600 hover:text-black transition-colors duration-200">
+                                Cerrar sesión
+                            </button>
+                        </form>
                     @else
                         <a href="{{ route('login') }}" class="text-sm text-gray-600 hover:text-black transition-colors duration-200">
                             Iniciar sesión
@@ -65,6 +68,27 @@
             </div>
         </div>
         </header>
+
+    <!-- Mensaje de éxito (si existe) -->
+    @if(session('success'))
+        <div class="bg-green-50 border-b-2 border-green-500">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <svg class="w-6 h-6 text-green-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <p class="text-sm font-medium text-green-900">{{ session('success') }}</p>
+                    </div>
+                    <button onclick="this.parentElement.parentElement.parentElement.remove()" class="text-green-600 hover:text-green-800 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    @endif
 
     <!-- Hero Section -->
     <section class="relative bg-white py-32 lg:py-40 border-b border-gray-100">
@@ -203,21 +227,12 @@
                         </p>
                         
                         <!-- Botón -->
-                        @auth
-                            <a href="{{ route('messages.new-conversation') }}" class="inline-flex items-center text-black hover:text-gray-600 text-sm font-medium border-b border-black hover:border-gray-600 transition-colors duration-200">
-                                Contactar
-                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                                </svg>
-                            </a>
-                        @else
-                            <a href="{{ route('login') }}" class="inline-flex items-center text-black hover:text-gray-600 text-sm font-medium border-b border-black hover:border-gray-600 transition-colors duration-200">
-                                Iniciar sesión
-                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                                </svg>
-                            </a>
-                        @endauth
+                        <a href="{{ route('nutritionist.profile') }}" class="inline-flex items-center text-black hover:text-gray-600 text-sm font-medium border-b border-black hover:border-gray-600 transition-colors duration-200">
+                            Ver perfil
+                            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </a>
                     </div>
                 @empty
                     <div class="col-span-full text-center py-24 border border-gray-200 bg-white">
@@ -391,6 +406,20 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        // Auto-cerrar mensajes de éxito después de 5 segundos
+        document.addEventListener('DOMContentLoaded', function() {
+            const successMessage = document.querySelector('.bg-green-50');
+            if (successMessage) {
+                setTimeout(() => {
+                    successMessage.style.transition = 'opacity 0.5s ease-out';
+                    successMessage.style.opacity = '0';
+                    setTimeout(() => successMessage.remove(), 500);
+                }, 5000);
+            }
+        });
+    </script>
 
     </body>
 </html>

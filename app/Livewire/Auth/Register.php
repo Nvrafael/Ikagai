@@ -34,13 +34,17 @@ class Register extends Component
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
+        $validated['role'] = 'client'; // Asignar rol de cliente por defecto
 
         event(new Registered(($user = User::create($validated))));
 
         Auth::login($user);
 
         Session::regenerate();
+        
+        Session::flash('success', '¡Bienvenido a IKIGAI! Tu cuenta ha sido creada exitosamente.');
 
-        $this->redirect(route('dashboard', absolute: false), navigate: true);
+        // Redirigir a los clientes a la página principal en lugar del dashboard
+        $this->redirect('/', navigate: true);
     }
 }

@@ -53,6 +53,15 @@ class ProductController extends Controller
     }
 
     /**
+     * Mostrar formulario de creación
+     */
+    public function create()
+    {
+        $categories = Category::where('is_active', true)->orderBy('name')->get();
+        return view('admin.products.create', compact('categories'));
+    }
+
+    /**
      * Mostrar un producto específico
      */
     public function show(Product $product)
@@ -87,9 +96,15 @@ class ProductController extends Controller
             'ingredients' => 'nullable|string',
             'weight' => 'nullable|string',
             'is_featured' => 'boolean',
+            'is_active' => 'boolean',
         ]);
 
         $validated['slug'] = Str::slug($validated['name']);
+        
+        // Asegurar que is_active tiene valor
+        if (!isset($validated['is_active'])) {
+            $validated['is_active'] = true;
+        }
 
         // Procesar imágenes
         if ($request->hasFile('images')) {

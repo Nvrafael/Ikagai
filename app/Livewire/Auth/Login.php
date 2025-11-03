@@ -52,7 +52,18 @@ class Login extends Component
         RateLimiter::clear($this->throttleKey());
         Session::regenerate();
 
-        $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
+        // Redirección según el rol del usuario
+        if ($user->role === 'admin') {
+            Session::flash('success', '¡Bienvenido de nuevo, Admin!');
+            $this->redirect(route('admin.dashboard', absolute: false), navigate: true);
+        } elseif ($user->role === 'nutritionist') {
+            Session::flash('success', '¡Bienvenido de nuevo!');
+            $this->redirect(route('nutritionist.dashboard', absolute: false), navigate: true);
+        } else {
+            // Los clientes van a la página principal
+            Session::flash('success', '¡Bienvenido de nuevo a IKIGAI!');
+            $this->redirect('/', navigate: true);
+        }
     }
 
     /**

@@ -39,7 +39,8 @@ class AuthenticatedSessionController extends Controller
             return redirect()->route('nutritionist.dashboard');
         }
     
-        return redirect()->route('client.dashboard'); // por defecto
+        // Los clientes van a la página principal
+        return redirect('/')->with('success', '¡Bienvenido de nuevo a IKIGAI!');
     }
 
     /**
