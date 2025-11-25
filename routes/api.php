@@ -38,6 +38,15 @@ Route::prefix('cart')->group(function () {
     Route::put('/{productId}', [CartApiController::class, 'update'])->name('api.cart.update');
     Route::delete('/{productId}', [CartApiController::class, 'remove'])->name('api.cart.remove');
     Route::delete('/', [CartApiController::class, 'clear'])->name('api.cart.clear');
+    
+    // Endpoint de debug para verificar la sesión
+    Route::get('/debug', function() {
+        return response()->json([
+            'session_id' => session()->getId(),
+            'cart' => session()->get('cart', []),
+            'all_session' => session()->all()
+        ]);
+    });
 });
 
 // ==========================================

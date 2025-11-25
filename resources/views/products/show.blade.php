@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $product->name }} - IKIGAI</title>
     <meta name="description" content="{{ Str::limit($product->description, 160) }}">
 
@@ -47,6 +48,16 @@
 
                 <!-- Auth Buttons -->
                 <div class="flex items-center space-x-6">
+                    <!-- Carrito -->
+                    <a href="{{ route('cart.index') }}" class="relative text-gray-600 hover:text-black transition-colors duration-200">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                        <span id="cart-badge" class="hidden absolute -top-2 -right-2 bg-black text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-medium">
+                            0
+                        </span>
+                    </a>
+                    
                     @auth
                         <a href="{{ route('dashboard') }}" class="text-sm text-gray-600 hover:text-black transition-colors duration-200">
                             Dashboard
@@ -209,30 +220,54 @@
                         </div>
                     @endif
 
+                    <!-- Selector de cantidad -->
+                    @if($product->stock > 0)
+                        <div class="mb-6">
+                            <label class="block text-sm text-gray-600 mb-2">Cantidad</label>
+                            <div class="flex items-center gap-3 w-32">
+                                <button 
+                                    onclick="decrementQuantity()"
+                                    class="w-10 h-10 border border-gray-300 hover:border-black flex items-center justify-center transition-colors"
+                                >
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                                    </svg>
+                                </button>
+                                
+                                <input 
+                                    type="number" 
+                                    id="product-quantity"
+                                    value="1"
+                                    min="1"
+                                    max="{{ $product->stock }}"
+                                    class="w-full text-center border border-gray-300 py-2"
+                                >
+                                
+                                <button 
+                                    onclick="incrementQuantity()"
+                                    class="w-10 h-10 border border-gray-300 hover:border-black flex items-center justify-center transition-colors"
+                                >
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    @endif
+
                     <!-- Botón de compra -->
                     <div class="space-y-4 mb-8">
                         @if($product->stock > 0)
-                            <form method="POST" action="{{ route('orders.store') }}">
-                                @csrf
-                                <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                <input type="hidden" name="quantity" value="1">
-                                
-                                @auth
-                                    <button 
-                                        type="submit"
-                                        class="w-full bg-black text-white hover:bg-gray-900 px-10 py-4 text-base font-medium transition-colors duration-200"
-                                    >
-                                        Agregar al carrito
-                                    </button>
-                                @else
-                                    <a 
-                                        href="{{ route('login') }}" 
-                                        class="block w-full text-center bg-black text-white hover:bg-gray-900 px-10 py-4 text-base font-medium transition-colors duration-200"
-                                    >
-                                        Inicia sesión para comprar
-                                    </a>
-                                @endauth
-                            </form>
+                            <button 
+                                data-add-to-cart
+                                data-product-id="{{ $product->id }}"
+                                class="w-full bg-black text-white hover:bg-gray-900 px-10 py-4 text-base font-medium transition-colors duration-200 flex items-center justify-center"
+                            >
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                </svg>
+                                Agregar al carrito
+                            </button>
                         @else
                             <button 
                                 disabled
@@ -243,10 +278,10 @@
                         @endif
 
                         <a 
-                            href="{{ route('messages.new-conversation') }}" 
+                            href="{{ route('products.index') }}" 
                             class="block w-full text-center bg-white text-black hover:bg-gray-50 px-10 py-4 text-base font-medium border border-black transition-colors duration-200"
                         >
-                            Consultar con nutricionista
+                            Continuar comprando
                         </a>
                     </div>
 
@@ -444,6 +479,9 @@
     </footer>
 
     <script>
+        const MAX_STOCK = {{ $product->stock }};
+
+        // Cambiar imagen principal
         function changeMainImage(imageUrl) {
             const mainImage = document.querySelector('#main-image img');
             mainImage.src = imageUrl;
@@ -456,6 +494,124 @@
             });
             event.currentTarget.classList.remove('border-gray-200');
             event.currentTarget.classList.add('border-black');
+        }
+
+        // Gestión de cantidad
+        function incrementQuantity() {
+            const input = document.getElementById('product-quantity');
+            if (parseInt(input.value) < MAX_STOCK) {
+                input.value = parseInt(input.value) + 1;
+            }
+        }
+
+        function decrementQuantity() {
+            const input = document.getElementById('product-quantity');
+            if (parseInt(input.value) > 1) {
+                input.value = parseInt(input.value) - 1;
+            }
+        }
+
+        // Cargar badge del carrito
+        document.addEventListener('DOMContentLoaded', loadCartBadge);
+
+        async function loadCartBadge() {
+            try {
+                const response = await fetch('/carrito/count');
+                const data = await response.json();
+                
+                if (data.success && data.total_items > 0) {
+                    const badge = document.querySelector('#cart-badge');
+                    if (badge) {
+                        badge.textContent = data.total_items;
+                        badge.classList.remove('hidden');
+                    }
+                }
+            } catch (error) {
+                console.error('Error al cargar el carrito:', error);
+            }
+        }
+
+        // Gestión del carrito
+        let isProcessing = false;
+
+        document.addEventListener('click', async function(e) {
+            const btn = e.target.closest('[data-add-to-cart]');
+            if (!btn || isProcessing) return;
+
+            e.preventDefault();
+            isProcessing = true;
+
+            const productId = btn.dataset.productId;
+            const quantity = parseInt(document.getElementById('product-quantity')?.value || 1);
+            const originalContent = btn.innerHTML;
+
+            try {
+                btn.disabled = true;
+                btn.innerHTML = '<svg class="animate-spin h-5 w-5 mx-auto" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
+
+                const response = await fetch('/carrito/agregar', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: JSON.stringify({
+                        product_id: parseInt(productId),
+                        quantity: quantity
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Actualizar badge
+                    const badge = document.querySelector('#cart-badge');
+                    if (badge && data.total_items) {
+                        badge.textContent = data.total_items;
+                        badge.classList.remove('hidden');
+                    }
+
+                    // Mostrar notificación
+                    showToast(`¡${quantity} producto(s) agregado(s) al carrito!`, 'success');
+                    
+                    // Cambiar contenido temporalmente
+                    btn.innerHTML = '<svg class="w-5 h-5 mx-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>';
+                    
+                    setTimeout(() => {
+                        btn.innerHTML = originalContent;
+                        btn.disabled = false;
+                    }, 2000);
+                } else {
+                    throw new Error(data.message || 'Error al agregar producto');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showToast(error.message || 'Error al agregar producto', 'error');
+                btn.innerHTML = originalContent;
+                btn.disabled = false;
+            } finally {
+                isProcessing = false;
+            }
+        });
+
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `fixed top-4 right-4 px-6 py-3 rounded-lg text-white z-50 shadow-lg transition-all duration-300 ${
+                type === 'success' ? 'bg-green-600' : 'bg-red-600'
+            }`;
+            toast.textContent = message;
+            toast.style.transform = 'translateX(400px)';
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.transform = 'translateX(0)';
+            }, 10);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(400px)';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
         }
     </script>
 

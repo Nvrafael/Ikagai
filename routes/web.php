@@ -13,6 +13,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\CartController;
 
 Route::get('/', function () {
     $featuredProducts = \App\Models\Product::where('is_featured', true)
@@ -64,6 +65,14 @@ Route::get('/productos/{product:slug}', [ProductController::class, 'show'])->nam
 // Servicios
 Route::get('/servicios', [ServiceController::class, 'index'])->name('services.index');
 Route::get('/servicios/{service:slug}', [ServiceController::class, 'show'])->name('services.show');
+
+// Carrito
+Route::get('/carrito', [CartController::class, 'index'])->name('cart.index');
+Route::post('/carrito/agregar', [CartController::class, 'add'])->name('cart.add');
+Route::put('/carrito/{productId}', [CartController::class, 'update'])->name('cart.update');
+Route::delete('/carrito/{productId}', [CartController::class, 'remove'])->name('cart.remove');
+Route::get('/carrito/count', [CartController::class, 'count'])->name('cart.count');
+Route::delete('/carrito', [CartController::class, 'clear'])->name('cart.clear');
 
 // Página del nutricionista
 Route::get('/nutricionista', function() {

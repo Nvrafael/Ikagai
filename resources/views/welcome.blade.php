@@ -47,6 +47,16 @@
 
                 <!-- Auth Buttons -->
                 <div class="flex items-center space-x-6">
+                    <!-- Carrito -->
+                    <a href="{{ route('cart.index') }}" class="relative text-gray-600 hover:text-black transition-colors duration-200">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                        <span id="cart-badge" class="hidden absolute -top-2 -right-2 bg-black text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-medium">
+                            0
+                        </span>
+                    </a>
+                    
                     @auth
                         <form method="POST" action="{{ route('logout') }}" class="inline">
                             @csrf
@@ -162,18 +172,32 @@
                                 </div>
                                 
                                 <!-- Precio -->
-                                <div class="flex items-baseline gap-2">
+                                <div class="flex items-baseline gap-2 mb-4">
                                     <span class="text-base font-medium text-black">
                                         ${{ number_format($product->price, 2) }}
-                            </span>
+                                    </span>
                                     @if($product->compare_price)
                                         <span class="text-sm text-gray-400 line-through">
                                             ${{ number_format($product->compare_price, 2) }}
-                                </span>
+                                        </span>
                                     @endif
                                 </div>
                             </div>
                         </a>
+                        
+                        <!-- Botón de carrito -->
+                        <div class="px-8 pb-8" onclick="event.stopPropagation()">
+                            <button 
+                                data-add-to-cart
+                                data-product-id="{{ $product->id }}"
+                                class="w-full inline-flex items-center justify-center bg-black text-white hover:bg-gray-900 px-6 py-3 text-sm font-medium transition-colors duration-200"
+                            >
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                </svg>
+                                Agregar al carrito
+                            </button>
+                        </div>
                     </div>
                 @empty
                     <div class="col-span-full text-center py-24 border border-gray-200 bg-white">
@@ -418,7 +442,112 @@
                     setTimeout(() => successMessage.remove(), 500);
                 }, 5000);
             }
+
+            // Cargar el carrito al inicio
+            loadCartBadge();
         });
+
+        // Cargar badge del carrito
+        async function loadCartBadge() {
+            try {
+                const response = await fetch('/carrito/count');
+                const data = await response.json();
+                
+                if (data.success && data.total_items > 0) {
+                    const badge = document.querySelector('#cart-badge');
+                    if (badge) {
+                        badge.textContent = data.total_items;
+                        badge.classList.remove('hidden');
+                    }
+                }
+            } catch (error) {
+                console.error('Error al cargar el carrito:', error);
+            }
+        }
+
+        // Gestión del carrito
+        let isProcessing = false;
+
+        document.addEventListener('click', async function(e) {
+            const btn = e.target.closest('[data-add-to-cart]');
+            if (!btn || isProcessing) return;
+
+            e.preventDefault();
+            e.stopPropagation();
+            isProcessing = true;
+
+            const productId = btn.dataset.productId;
+            const originalContent = btn.innerHTML;
+
+            try {
+                // Cambiar el texto del botón
+                btn.disabled = true;
+                btn.innerHTML = '<svg class="animate-spin h-5 w-5 mx-auto" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
+
+                const response = await fetch('/carrito/agregar', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+                    },
+                    body: JSON.stringify({
+                        product_id: parseInt(productId),
+                        quantity: 1
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Actualizar badge del carrito
+                    const badge = document.querySelector('#cart-badge');
+                    if (badge && data.total_items) {
+                        badge.textContent = data.total_items;
+                        badge.classList.remove('hidden');
+                    }
+
+                    // Mostrar notificación
+                    showToast('¡Producto agregado al carrito!', 'success');
+                    
+                    // Cambiar temporalmente el contenido
+                    btn.innerHTML = '<svg class="w-5 h-5 mx-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>';
+                    
+                    setTimeout(() => {
+                        btn.innerHTML = originalContent;
+                        btn.disabled = false;
+                    }, 2000);
+                } else {
+                    throw new Error(data.message || 'Error al agregar producto');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showToast(error.message || 'Error al agregar producto', 'error');
+                btn.innerHTML = originalContent;
+                btn.disabled = false;
+            } finally {
+                isProcessing = false;
+            }
+        });
+
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `fixed top-4 right-4 px-6 py-3 rounded-lg text-white z-50 shadow-lg transition-all duration-300 ${
+                type === 'success' ? 'bg-green-600' : 'bg-red-600'
+            }`;
+            toast.textContent = message;
+            toast.style.transform = 'translateX(400px)';
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.transform = 'translateX(0)';
+            }, 10);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(400px)';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
     </script>
 
     </body>

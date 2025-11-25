@@ -1,26 +1,42 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
-class CartApiController extends Controller
+class CartController extends Controller
 {
     /**
-     * Obtener el carrito actual (desde sesión)
+     * Mostrar la vista del carrito
      */
-    public function index(Request $request)
+    public function index()
     {
         $cart = session()->get('cart', []);
         
-        $cartDetails = $this->getCartDetails($cart);
-
-        return response()->json([
-            'success' => true,
-            'data' => $cartDetails,
-        ]);
+        // Obtener detalles completos de los productos en el carrito
+        $cartItems = [];
+        $subtotal = 0;
+        
+        foreach ($cart as $productId => $item) {
+            $product = Product::find($productId);
+            
+            if ($product) {
+                $itemTotal = $product->price * $item['quantity'];
+                $subtotal += $itemTotal;
+                
+                $cartItems[] = [
+                    'product' => $product,
+                    'quantity' => $item['quantity'],
+                    'subtotal' => $itemTotal,
+                ];
+            }
+        }
+        
+        $tax = $subtotal * 0.16; // 16% IVA
+        $total = $subtotal + $tax;
+        
+        return view('cart.index', compact('cartItems', 'subtotal', 'tax', 'total'));
     }
 
     /**
@@ -30,13 +46,14 @@ class CartApiController extends Controller
     {
         $request->validate([
             'product_id' => 'required|exists:products,id',
-            'quantity' => 'required|integer|min:1',
+            'quantity' => 'integer|min:1',
         ]);
 
         $product = Product::findOrFail($request->product_id);
+        $quantity = $request->quantity ?? 1;
 
         // Verificar stock
-        if (!$product->hasStock($request->quantity)) {
+        if (!$product->hasStock($quantity)) {
             return response()->json([
                 'success' => false,
                 'message' => "Solo hay {$product->stock} unidades disponibles",
@@ -47,7 +64,7 @@ class CartApiController extends Controller
 
         // Si el producto ya está en el carrito, actualizar cantidad
         if (isset($cart[$product->id])) {
-            $newQuantity = $cart[$product->id]['quantity'] + $request->quantity;
+            $newQuantity = $cart[$product->id]['quantity'] + $quantity;
             
             if (!$product->hasStock($newQuantity)) {
                 return response()->json([
@@ -64,20 +81,20 @@ class CartApiController extends Controller
                 'name' => $product->name,
                 'slug' => $product->slug,
                 'price' => (float) $product->price,
-                'quantity' => $request->quantity,
+                'quantity' => $quantity,
                 'image' => $product->images[0] ?? null,
             ];
         }
 
         session()->put('cart', $cart);
-        session()->save(); // Forzar guardar la sesión
 
-        $cartDetails = $this->getCartDetails($cart);
+        // Calcular total de items
+        $totalItems = array_sum(array_column($cart, 'quantity'));
 
         return response()->json([
             'success' => true,
             'message' => 'Producto agregado al carrito',
-            'data' => $cartDetails,
+            'total_items' => $totalItems,
         ]);
     }
 
@@ -104,10 +121,12 @@ class CartApiController extends Controller
             unset($cart[$productId]);
             session()->put('cart', $cart);
 
+            $totalItems = array_sum(array_column($cart, 'quantity'));
+
             return response()->json([
                 'success' => true,
                 'message' => 'Producto eliminado del carrito',
-                'data' => $this->getCartDetails($cart),
+                'total_items' => $totalItems,
             ]);
         }
 
@@ -123,12 +142,12 @@ class CartApiController extends Controller
         $cart[$productId]['quantity'] = $request->quantity;
         session()->put('cart', $cart);
 
-        $cartDetails = $this->getCartDetails($cart);
+        $totalItems = array_sum(array_column($cart, 'quantity'));
 
         return response()->json([
             'success' => true,
             'message' => 'Carrito actualizado',
-            'data' => $cartDetails,
+            'total_items' => $totalItems,
         ]);
     }
 
@@ -149,66 +168,35 @@ class CartApiController extends Controller
         unset($cart[$productId]);
         session()->put('cart', $cart);
 
-        $cartDetails = $this->getCartDetails($cart);
+        $totalItems = array_sum(array_column($cart, 'quantity'));
 
         return response()->json([
             'success' => true,
             'message' => 'Producto eliminado del carrito',
-            'data' => $cartDetails,
+            'total_items' => $totalItems,
         ]);
     }
 
     /**
-     * Limpiar el carrito completo
+     * Obtener conteo del carrito
+     */
+    public function count()
+    {
+        $cart = session()->get('cart', []);
+        $totalItems = array_sum(array_column($cart, 'quantity'));
+
+        return response()->json([
+            'success' => true,
+            'total_items' => $totalItems,
+        ]);
+    }
+
+    /**
+     * Limpiar el carrito
      */
     public function clear()
     {
         session()->forget('cart');
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Carrito vaciado',
-            'data' => [
-                'items' => [],
-                'count' => 0,
-                'subtotal' => 0,
-                'total' => 0,
-            ],
-        ]);
-    }
-
-    /**
-     * Obtener detalles del carrito con cálculos
-     */
-    private function getCartDetails($cart)
-    {
-        $items = [];
-        $subtotal = 0;
-
-        foreach ($cart as $item) {
-            $itemTotal = $item['price'] * $item['quantity'];
-            $subtotal += $itemTotal;
-
-            $items[] = [
-                'id' => $item['id'],
-                'name' => $item['name'],
-                'slug' => $item['slug'],
-                'price' => $item['price'],
-                'quantity' => $item['quantity'],
-                'image' => $item['image'],
-                'subtotal' => $itemTotal,
-                'url' => route('products.show', $item['slug']),
-            ];
-        }
-
-        return [
-            'items' => $items,
-            'count' => count($items),
-            'total_items' => array_sum(array_column($items, 'quantity')),
-            'subtotal' => round($subtotal, 2),
-            'tax' => round($subtotal * 0.16, 2), // 16% IVA
-            'total' => round($subtotal * 1.16, 2),
-        ];
+        return redirect()->route('cart.index')->with('success', 'Carrito vaciado');
     }
 }
-

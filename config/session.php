@@ -18,7 +18,7 @@ return [
     |
     */
 
-    'driver' => env('SESSION_DRIVER', 'database'),
+    'driver' => 'file', // Forzado a file para que funcione el carrito
 
     /*
     |--------------------------------------------------------------------------
