@@ -24,7 +24,7 @@
                 required 
                 autofocus 
                 autocomplete="name"
-                class="w-full px-4 py-3 border border-gray-200 focus:border-black focus:outline-none transition-colors duration-200 text-sm @error('name') border-red-500 @enderror"
+                class="w-full px-4 py-3 border border-gray-200 focus:border-sage focus:ring-2 focus:ring-sage focus:ring-opacity-20 focus:outline-none transition-colors duration-200 text-sm @error('name') border-red-500 @enderror"
                 placeholder="Tu nombre completo"
             />
             @error('name')
@@ -44,7 +44,7 @@
                 value="{{ old('email') }}"
                 required 
                 autocomplete="username"
-                class="w-full px-4 py-3 border border-gray-200 focus:border-black focus:outline-none transition-colors duration-200 text-sm @error('email') border-red-500 @enderror"
+                class="w-full px-4 py-3 border border-gray-200 focus:border-sage focus:ring-2 focus:ring-sage focus:ring-opacity-20 focus:outline-none transition-colors duration-200 text-sm @error('email') border-red-500 @enderror"
                 placeholder="tu@email.com"
             />
             @error('email')
@@ -63,7 +63,7 @@
                 name="password"
                 required 
                 autocomplete="new-password"
-                class="w-full px-4 py-3 border border-gray-200 focus:border-black focus:outline-none transition-colors duration-200 text-sm @error('password') border-red-500 @enderror"
+                class="w-full px-4 py-3 border border-gray-200 focus:border-sage focus:ring-2 focus:ring-sage focus:ring-opacity-20 focus:outline-none transition-colors duration-200 text-sm @error('password') border-red-500 @enderror"
                 placeholder="Mínimo 8 caracteres"
             />
             @error('password')
@@ -82,7 +82,7 @@
                 name="password_confirmation"
                 required 
                 autocomplete="new-password"
-                class="w-full px-4 py-3 border border-gray-200 focus:border-black focus:outline-none transition-colors duration-200 text-sm"
+                class="w-full px-4 py-3 border border-gray-200 focus:border-sage focus:ring-2 focus:ring-sage focus:ring-opacity-20 focus:outline-none transition-colors duration-200 text-sm"
                 placeholder="Repite tu contraseña"
             />
         </div>
@@ -90,16 +90,16 @@
         <!-- Submit Button -->
         <button 
             type="submit"
-            class="w-full bg-black text-white hover:bg-gray-900 px-6 py-4 text-sm font-medium transition-colors duration-200"
+            class="w-full bg-sage text-white hover:bg-sage-dark px-6 py-4 text-sm font-medium transition-colors duration-200 shadow-md hover:shadow-lg"
         >
             Crear cuenta
         </button>
 
         <!-- Login Link -->
         <div class="text-center pt-6 border-t border-gray-100">
-            <p class="text-sm text-gray-500">
+            <p class="text-sm text-gray-600">
                 ¿Ya tienes cuenta?
-                <a href="{{ route('login') }}" class="text-black hover:text-gray-600 border-b border-black hover:border-gray-600 transition-colors duration-200 ml-1">
+                <a href="{{ route('login') }}" class="text-sage-dark hover:text-sage border-b border-sage-dark hover:border-sage transition-colors duration-200 ml-1">
                     Inicia sesión
                 </a>
             </p>

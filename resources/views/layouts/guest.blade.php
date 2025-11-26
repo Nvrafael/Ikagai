@@ -31,19 +31,19 @@
         </div>
 
         <!-- Right Side - Image/Pattern -->
-        <div class="hidden lg:flex lg:w-1/2 bg-gray-50 items-center justify-center p-12 border-l border-gray-100">
+        <div class="hidden lg:flex lg:w-1/2 bg-beige items-center justify-center p-12 border-l border-gray-200">
             <div class="max-w-md text-center">
                 <h2 class="text-4xl font-light text-black mb-6 tracking-tight">
                     Encuentra tu equilibrio
                 </h2>
-                <p class="text-base text-gray-500 font-light leading-relaxed">
+                <p class="text-base text-gray-600 font-light leading-relaxed">
                     Descubre el equilibrio perfecto entre tu salud y bienestar con nuestros suplementos naturales y orientación experta
                 </p>
                 
                 <!-- Decorative element -->
                 <div class="mt-12 flex justify-center gap-2">
-                    <div class="w-16 h-1 bg-black"></div>
-                    <div class="w-16 h-1 bg-gray-300"></div>
+                    <div class="w-16 h-1 bg-sage"></div>
+                    <div class="w-16 h-1 bg-sage-light"></div>
                     <div class="w-16 h-1 bg-gray-200"></div>
                 </div>
             </div>

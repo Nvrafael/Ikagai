@@ -9,7 +9,7 @@
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="antialiased bg-gray-50 font-sans">
+<body class="antialiased bg-beige font-sans">
     
     <!-- Header -->
     <header class="bg-white border-b border-gray-100 sticky top-0 z-50">
@@ -35,7 +35,7 @@
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
                         </svg>
-                        <span id="cart-badge" class="absolute -top-2 -right-2 bg-black text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+                        <span id="cart-badge" class="absolute -top-2 -right-2 bg-sage text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
                             {{ count($cartItems) }}
                         </span>
                     </a>
@@ -103,7 +103,7 @@
                             <div class="flex items-center gap-3">
                                 <button 
                                     onclick="updateQuantity({{ $item['product']->id }}, {{ $item['quantity'] - 1 }})"
-                                    class="w-8 h-8 border border-gray-300 hover:border-black flex items-center justify-center transition-colors"
+                                    class="w-8 h-8 border border-sage hover:border-sage-dark flex items-center justify-center transition-colors"
                                 >
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
@@ -115,13 +115,13 @@
                                     value="{{ $item['quantity'] }}"
                                     min="1"
                                     max="{{ $item['product']->stock }}"
-                                    class="w-16 text-center border border-gray-300 py-1"
+                                    class="w-16 text-center border border-sage py-1 focus:border-sage-dark focus:ring-2 focus:ring-sage focus:ring-opacity-20"
                                     onchange="updateQuantity({{ $item['product']->id }}, this.value)"
                                 >
                                 
                                 <button 
                                     onclick="updateQuantity({{ $item['product']->id }}, {{ $item['quantity'] + 1 }})"
-                                    class="w-8 h-8 border border-gray-300 hover:border-black flex items-center justify-center transition-colors"
+                                    class="w-8 h-8 border border-sage hover:border-sage-dark flex items-center justify-center transition-colors"
                                 >
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
@@ -167,11 +167,11 @@
                             </div>
                         </div>
 
-                        <button class="w-full bg-black text-white py-4 hover:bg-gray-900 transition-colors mb-3">
+                        <button class="w-full bg-sage text-white py-4 hover:bg-sage-dark transition-colors mb-3 shadow-md hover:shadow-lg">
                             Proceder al Pago
                         </button>
                         
-                        <a href="{{ route('products.index') }}" class="block text-center text-sm text-gray-600 hover:text-black">
+                        <a href="{{ route('products.index') }}" class="block text-center text-sm text-sage-dark hover:text-sage">
                             Continuar comprando
                         </a>
 
@@ -192,8 +192,8 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
                 </svg>
                 <h3 class="text-2xl font-light text-black mb-2">Tu carrito está vacío</h3>
-                <p class="text-gray-500 mb-8">Agrega productos para comenzar tu compra</p>
-                <a href="{{ route('products.index') }}" class="inline-flex items-center bg-black text-white px-8 py-3 hover:bg-gray-900 transition-colors">
+                <p class="text-gray-600 mb-8">Agrega productos para comenzar tu compra</p>
+                <a href="{{ route('products.index') }}" class="inline-flex items-center bg-sage text-white px-8 py-3 hover:bg-sage-dark transition-colors shadow-md hover:shadow-lg">
                     Ver Productos
                     <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>

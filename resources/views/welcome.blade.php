@@ -101,26 +101,35 @@
     @endif
 
     <!-- Hero Section -->
-    <section class="relative bg-white py-32 lg:py-40 border-b border-gray-100">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section class="relative py-32 lg:py-40 border-b border-gray-200 overflow-hidden">
+        <!-- Imagen de fondo -->
+        <div class="absolute inset-0 z-0">
+            <img src="{{ asset('images/zen-background.jpg') }}" 
+                 alt="Zen background" 
+                 class="w-full h-full object-cover opacity-85"
+            />
+        </div>
+        
+        <!-- Contenido -->
+        <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center">
-                <h1 class="text-6xl sm:text-7xl lg:text-8xl font-light text-black mb-8 tracking-tight">
+                <h1 class="text-6xl sm:text-7xl lg:text-8xl font-light text-black mb-8 tracking-tight drop-shadow-lg">
                     IKIGAI
                 </h1>
-                <p class="text-xl sm:text-2xl text-gray-500 mb-6 max-w-2xl mx-auto font-light">
+                <p class="text-xl sm:text-2xl text-gray-800 mb-6 max-w-2xl mx-auto font-light drop-shadow-md">
                     Equilibrio perfecto entre salud y bienestar
                 </p>
-                <p class="text-sm text-gray-400 mb-12 font-mono">
+                <p class="text-sm text-gray-700 mb-12 font-mono drop-shadow-md">
                     +800-808-815 / info@ikigai.com / Lun-Vie 9am-6pm
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                    <a href="{{ route('products.index') }}" class="inline-flex items-center justify-center bg-black text-white hover:bg-gray-900 px-10 py-4 text-base font-medium transition-colors duration-200">
+                    <a href="{{ route('products.index') }}" class="inline-flex items-center justify-center bg-sage text-white hover:bg-sage-dark px-10 py-4 text-base font-medium transition-colors duration-200 shadow-lg hover:shadow-xl">
                         Explorar productos
                         <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
                                     </svg>
                                 </a>
-                    <a href="#nutricionistas" class="inline-flex items-center justify-center bg-white text-black hover:bg-gray-50 px-10 py-4 text-base font-medium border border-black transition-colors duration-200">
+                    <a href="#nutricionistas" class="inline-flex items-center justify-center bg-white text-sage-dark hover:bg-sage-light px-10 py-4 text-base font-medium border border-sage transition-colors duration-200 shadow-lg">
                         Nutricionistas
                     </a>
                 </div>
@@ -129,13 +138,13 @@
     </section>
 
     <!-- Productos Populares -->
-    <section class="py-24 lg:py-32 bg-gray-50">
+    <section class="py-24 lg:py-32 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="mb-20">
                 <h2 class="text-4xl sm:text-5xl font-light text-black mb-3 tracking-tight">
                     Productos
                 </h2>
-                <p class="text-base text-gray-500 font-light">
+                <p class="text-base text-gray-600 font-light">
                     Nuestra selección de suplementos naturales
                 </p>
             </div>
@@ -190,7 +199,7 @@
                             <button 
                                 data-add-to-cart
                                 data-product-id="{{ $product->id }}"
-                                class="w-full inline-flex items-center justify-center bg-black text-white hover:bg-gray-900 px-6 py-3 text-sm font-medium transition-colors duration-200"
+                                class="w-full inline-flex items-center justify-center bg-sage text-white hover:bg-sage-dark px-6 py-3 text-sm font-medium transition-colors duration-200"
                             >
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
@@ -208,7 +217,7 @@
 
             @if($featuredProducts->count() > 0)
                 <div class="mt-16">
-                    <a href="{{ route('products.index') }}" class="inline-flex items-center text-black hover:text-gray-600 text-sm font-medium border-b border-black hover:border-gray-600 transition-colors duration-200">
+                    <a href="{{ route('products.index') }}" class="inline-flex items-center text-sage-dark hover:text-sage text-sm font-medium border-b border-sage-dark hover:border-sage transition-colors duration-200">
                         Ver todos los productos
                         <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
@@ -220,23 +229,23 @@
     </section>
 
     <!-- Nutricionistas -->
-    <section id="nutricionistas" class="py-24 lg:py-32 bg-white border-t border-gray-100">
+    <section id="nutricionistas" class="py-24 lg:py-32 bg-beige border-t border-gray-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="mb-20">
                 <h2 class="text-4xl sm:text-5xl font-light text-black mb-3 tracking-tight">
                     Nutricionistas
                 </h2>
-                <p class="text-base text-gray-500 font-light">
+                <p class="text-base text-gray-600 font-light">
                     Profesionales certificados
                 </p>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1">
                 @forelse($nutritionists as $nutritionist)
-                    <div class="group bg-white border border-gray-200 hover:border-black transition-colors duration-200 p-12">
+                    <div class="group bg-white border border-sage hover:border-sage-dark transition-colors duration-200 p-12">
                         <!-- Avatar -->
                         <div class="mb-8">
-                            <div class="w-20 h-20 bg-black text-white flex items-center justify-center">
+                            <div class="w-20 h-20 bg-sage text-white flex items-center justify-center">
                                 <span class="text-2xl font-light">{{ $nutritionist->initials() }}</span>
                             </div>
                         </div>
@@ -246,12 +255,12 @@
                             {{ $nutritionist->name }}
                         </h3>
                         
-                        <p class="text-xs text-gray-500 uppercase tracking-wider mb-8">
+                        <p class="text-xs text-sage-dark uppercase tracking-wider mb-8">
                             Nutricionista certificado
                         </p>
                         
                         <!-- Botón -->
-                        <a href="{{ route('nutritionist.profile') }}" class="inline-flex items-center text-black hover:text-gray-600 text-sm font-medium border-b border-black hover:border-gray-600 transition-colors duration-200">
+                        <a href="{{ route('nutritionist.profile') }}" class="inline-flex items-center text-sage-dark hover:text-sage text-sm font-medium border-b border-sage-dark hover:border-sage transition-colors duration-200">
                             Ver perfil
                             <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
@@ -268,13 +277,13 @@
     </section>
 
     <!-- Recursos -->
-    <section id="recursos" class="py-24 lg:py-32 bg-gray-50 border-t border-gray-100">
+    <section id="recursos" class="py-24 lg:py-32 bg-white border-t border-gray-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="mb-20">
                 <h2 class="text-4xl sm:text-5xl font-light text-black mb-3 tracking-tight">
                     Recursos
                 </h2>
-                <p class="text-base text-gray-500 font-light">
+                <p class="text-base text-gray-600 font-light">
                     Guías y herramientas para tu bienestar
                 </p>
             </div>
@@ -291,7 +300,7 @@
                     <p class="text-sm text-gray-500 font-light mb-6">
                         Encuentra el mejor suplemento para tus necesidades
                     </p>
-                    <span class="inline-flex items-center text-black text-sm font-medium border-b border-black">
+                    <span class="inline-flex items-center text-sage-dark text-sm font-medium border-b border-sage-dark">
                         Ver más
                         <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
@@ -310,7 +319,7 @@
                     <p class="text-sm text-gray-500 font-light mb-6">
                         Ideas deliciosas para una vida sana
                     </p>
-                    <span class="inline-flex items-center text-black text-sm font-medium border-b border-black">
+                    <span class="inline-flex items-center text-sage-dark text-sm font-medium border-b border-sage-dark">
                         Ver más
                         <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
@@ -341,21 +350,21 @@
     </section>
 
     <!-- CTA Final -->
-    <section class="py-32 lg:py-40 bg-black border-t border-gray-900">
+    <section class="py-32 lg:py-40 bg-sage border-t border-sage-dark">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 class="text-4xl sm:text-5xl lg:text-6xl font-light text-white mb-12 tracking-tight">
                 Comienza tu viaje hacia el IKIGAI
             </h2>
             
             <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-20">
-                <a href="{{ route('products.index') }}" class="inline-flex items-center justify-center bg-white text-black hover:bg-gray-100 px-10 py-4 text-base font-medium transition-colors duration-200">
+                <a href="{{ route('products.index') }}" class="inline-flex items-center justify-center bg-white text-sage-dark hover:bg-beige px-10 py-4 text-base font-medium transition-colors duration-200 shadow-lg">
                     Explorar productos
                     <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
                     </svg>
                 </a>
                 
-                <a href="{{ route('services.index') }}" class="inline-flex items-center justify-center bg-black text-white hover:bg-gray-900 px-10 py-4 text-base font-medium border border-white transition-colors duration-200">
+                <a href="{{ route('services.index') }}" class="inline-flex items-center justify-center bg-sage text-white hover:bg-sage-dark px-10 py-4 text-base font-medium border border-white transition-colors duration-200">
                     Ver servicios
                 </a>
             </div>

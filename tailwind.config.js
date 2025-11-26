@@ -14,6 +14,17 @@ export default {
             fontFamily: {
                 sans: ['Inter', 'Figtree', ...defaultTheme.fontFamily.sans],
             },
+            colors: {
+                sage: {
+                    DEFAULT: '#9CAF88',
+                    light: '#E8F5E9',
+                    dark: '#7A9A65',
+                },
+                beige: {
+                    DEFAULT: '#F5F1E8',
+                    light: '#FAF8F3',
+                },
+            },
             animation: {
                 'blob': 'blob 7s infinite',
             },

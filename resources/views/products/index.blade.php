@@ -73,13 +73,13 @@
     </header>
 
     <!-- Hero Section -->
-    <section class="bg-white py-20 lg:py-24 border-b border-gray-100">
+    <section class="bg-beige py-20 lg:py-24 border-b border-gray-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="max-w-3xl">
                 <h1 class="text-5xl sm:text-6xl lg:text-7xl font-light text-black mb-6 tracking-tight">
                     Productos
                 </h1>
-                <p class="text-xl text-gray-500 font-light">
+                <p class="text-xl text-gray-600 font-light">
                     Descubre nuestra selección de suplementos naturales diseñados para tu bienestar
                 </p>
             </div>
@@ -87,7 +87,7 @@
     </section>
 
     <!-- Filtros y Búsqueda -->
-    <section class="bg-gray-50 py-8 border-b border-gray-100">
+    <section class="bg-white py-8 border-b border-gray-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <form method="GET" action="{{ route('products.index') }}" class="flex flex-col lg:flex-row gap-4">
                 <!-- Búsqueda -->
@@ -97,7 +97,7 @@
                         name="search" 
                         placeholder="Buscar productos..." 
                         value="{{ request('search') }}"
-                        class="w-full px-6 py-3 border border-gray-200 bg-white text-sm focus:outline-none focus:border-black transition-colors duration-200"
+                        class="w-full px-6 py-3 border border-gray-200 bg-white text-sm focus:outline-none focus:border-sage focus:ring-2 focus:ring-sage focus:ring-opacity-20 transition-colors duration-200"
                     >
                 </div>
 
@@ -105,7 +105,7 @@
                 <div class="w-full lg:w-64">
                     <select 
                         name="category" 
-                        class="w-full px-6 py-3 border border-gray-200 bg-white text-sm focus:outline-none focus:border-black transition-colors duration-200"
+                        class="w-full px-6 py-3 border border-gray-200 bg-white text-sm focus:outline-none focus:border-sage focus:ring-2 focus:ring-sage focus:ring-opacity-20 transition-colors duration-200"
                         onchange="this.form.submit()"
                     >
                         <option value="">Todas las categorías</option>
@@ -121,7 +121,7 @@
                 <div class="w-full lg:w-64">
                     <select 
                         name="sort" 
-                        class="w-full px-6 py-3 border border-gray-200 bg-white text-sm focus:outline-none focus:border-black transition-colors duration-200"
+                        class="w-full px-6 py-3 border border-gray-200 bg-white text-sm focus:outline-none focus:border-sage focus:ring-2 focus:ring-sage focus:ring-opacity-20 transition-colors duration-200"
                         onchange="this.form.submit()"
                     >
                         <option value="created_at" {{ request('sort') == 'created_at' ? 'selected' : '' }}>Más recientes</option>
@@ -132,7 +132,7 @@
 
                 <button 
                     type="submit"
-                    class="bg-black text-white hover:bg-gray-900 px-8 py-3 text-sm font-medium transition-colors duration-200"
+                    class="bg-sage text-white hover:bg-sage-dark px-8 py-3 text-sm font-medium transition-colors duration-200 shadow-md hover:shadow-lg"
                 >
                     Buscar
                 </button>
@@ -145,7 +145,7 @@
                     <div class="flex gap-2">
                         @if(request('search'))
                             <a href="{{ route('products.index', array_merge(request()->except('search'), [])) }}" 
-                               class="inline-flex items-center bg-white border border-gray-200 px-3 py-1 text-xs hover:border-black transition-colors duration-200">
+                               class="inline-flex items-center bg-sage-light border border-sage px-3 py-1 text-xs text-sage-dark hover:border-sage-dark transition-colors duration-200">
                                 Búsqueda: "{{ request('search') }}"
                                 <svg class="w-3 h-3 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -154,14 +154,14 @@
                         @endif
                         @if(request('category'))
                             <a href="{{ route('products.index', array_merge(request()->except('category'), [])) }}" 
-                               class="inline-flex items-center bg-white border border-gray-200 px-3 py-1 text-xs hover:border-black transition-colors duration-200">
+                               class="inline-flex items-center bg-sage-light border border-sage px-3 py-1 text-xs text-sage-dark hover:border-sage-dark transition-colors duration-200">
                                 Categoría: {{ $categories->find(request('category'))->name ?? '' }}
                                 <svg class="w-3 h-3 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                 </svg>
                             </a>
                         @endif
-                        <a href="{{ route('products.index') }}" class="text-xs text-gray-600 hover:text-black underline">
+                        <a href="{{ route('products.index') }}" class="text-xs text-sage-dark hover:text-sage underline">
                             Limpiar todo
                         </a>
                     </div>
@@ -171,7 +171,7 @@
     </section>
 
     <!-- Grid de Productos -->
-    <section class="py-16 lg:py-20 bg-gray-50">
+    <section class="py-16 lg:py-20 bg-beige">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
             @if($products->count() > 0)
@@ -253,7 +253,7 @@
                                 </span>
                             @else
                                 <a href="{{ $products->previousPageUrl() }}" 
-                                   class="px-4 py-2 border border-gray-200 text-black hover:border-black text-sm transition-colors duration-200">
+                                   class="px-4 py-2 border border-sage text-sage-dark hover:border-sage-dark text-sm transition-colors duration-200">
                                     Anterior
                                 </a>
                             @endif
@@ -261,12 +261,12 @@
                             {{-- Números de página --}}
                             @foreach(range(1, $products->lastPage()) as $page)
                                 @if($page == $products->currentPage())
-                                    <span class="px-4 py-2 bg-black text-white text-sm">
+                                    <span class="px-4 py-2 bg-sage text-white text-sm">
                                         {{ $page }}
                                     </span>
                                 @else
                                     <a href="{{ $products->url($page) }}" 
-                                       class="px-4 py-2 border border-gray-200 text-black hover:border-black text-sm transition-colors duration-200">
+                                       class="px-4 py-2 border border-sage text-sage-dark hover:border-sage-dark text-sm transition-colors duration-200">
                                         {{ $page }}
                                     </a>
                                 @endif
@@ -275,7 +275,7 @@
                             {{-- Botón siguiente --}}
                             @if($products->hasMorePages())
                                 <a href="{{ $products->nextPageUrl() }}" 
-                                   class="px-4 py-2 border border-gray-200 text-black hover:border-black text-sm transition-colors duration-200">
+                                   class="px-4 py-2 border border-sage text-sage-dark hover:border-sage-dark text-sm transition-colors duration-200">
                                     Siguiente
                                 </a>
                             @else
@@ -300,7 +300,7 @@
                     </p>
                     @if(request()->hasAny(['search', 'category', 'sort']))
                         <a href="{{ route('products.index') }}" 
-                           class="inline-flex items-center text-black hover:text-gray-600 text-sm font-medium border-b border-black hover:border-gray-600 transition-colors duration-200">
+                           class="inline-flex items-center text-sage-dark hover:text-sage text-sm font-medium border-b border-sage-dark hover:border-sage transition-colors duration-200">
                             Ver todos los productos
                             <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
@@ -313,15 +313,15 @@
     </section>
 
     <!-- CTA Section -->
-    <section class="py-24 lg:py-32 bg-white border-t border-gray-100">
+    <section class="py-24 lg:py-32 bg-white border-t border-gray-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 class="text-4xl sm:text-5xl font-light text-black mb-6 tracking-tight">
                 ¿Necesitas ayuda personalizada?
             </h2>
-            <p class="text-lg text-gray-500 font-light mb-10 max-w-2xl mx-auto">
+            <p class="text-lg text-gray-600 font-light mb-10 max-w-2xl mx-auto">
                 Nuestros nutricionistas certificados pueden ayudarte a elegir los mejores suplementos para tus objetivos
             </p>
-            <a href="/#nutricionistas" class="inline-flex items-center justify-center bg-black text-white hover:bg-gray-900 px-10 py-4 text-base font-medium transition-colors duration-200">
+            <a href="/#nutricionistas" class="inline-flex items-center justify-center bg-sage text-white hover:bg-sage-dark px-10 py-4 text-base font-medium transition-colors duration-200 shadow-md hover:shadow-lg">
                 Consultar con un nutricionista
                 <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>

@@ -17,7 +17,7 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="antialiased bg-gray-50 font-sans">
+<body class="antialiased bg-beige font-sans">
     
     <!-- Header -->
     <header class="bg-white border-b border-gray-100 sticky top-0 z-50">
@@ -53,7 +53,7 @@
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
                         </svg>
-                        <span id="cart-badge" class="hidden absolute -top-2 -right-2 bg-black text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-medium">
+                        <span id="cart-badge" class="hidden absolute -top-2 -right-2 bg-sage text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-medium">
                             0
                         </span>
                     </a>
@@ -73,7 +73,7 @@
                             Iniciar sesión
                         </a>
                         @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="bg-black text-white hover:bg-gray-900 px-6 py-2 text-sm font-medium transition-colors duration-200">
+                            <a href="{{ route('register') }}" class="bg-sage text-white hover:bg-sage-dark px-6 py-2 text-sm font-medium transition-colors duration-200 shadow-md hover:shadow-lg">
                                 Registrarse
                             </a>
                         @endif
@@ -84,15 +84,15 @@
     </header>
 
     <!-- Breadcrumb -->
-    <section class="bg-white py-6 border-b border-gray-100">
+    <section class="bg-white py-6 border-b border-gray-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center gap-2 text-sm">
-                <a href="/" class="text-gray-500 hover:text-black transition-colors duration-200">Inicio</a>
+                <a href="/" class="text-sage-dark hover:text-sage transition-colors duration-200">Inicio</a>
                 <span class="text-gray-300">/</span>
-                <a href="{{ route('products.index') }}" class="text-gray-500 hover:text-black transition-colors duration-200">Productos</a>
+                <a href="{{ route('products.index') }}" class="text-sage-dark hover:text-sage transition-colors duration-200">Productos</a>
                 @if($product->category)
                     <span class="text-gray-300">/</span>
-                    <a href="{{ route('products.index', ['category' => $product->category->id]) }}" class="text-gray-500 hover:text-black transition-colors duration-200">
+                    <a href="{{ route('products.index', ['category' => $product->category->id]) }}" class="text-sage-dark hover:text-sage transition-colors duration-200">
                         {{ $product->category->name }}
                     </a>
                 @endif
@@ -124,7 +124,7 @@
                                     @foreach($product->images as $index => $image)
                                         <button 
                                             onclick="changeMainImage('{{ asset('storage/' . $image) }}')"
-                                            class="bg-gray-50 border border-gray-200 p-4 hover:border-black transition-colors duration-200 {{ $index === 0 ? 'border-black' : '' }}"
+                                            class="bg-gray-50 border border-gray-200 p-4 hover:border-sage transition-colors duration-200 {{ $index === 0 ? 'border-sage' : '' }}"
                                         >
                                             <img src="{{ asset('storage/' . $image) }}" 
                                                  alt="{{ $product->name }} - {{ $index + 1 }}" 
@@ -227,7 +227,7 @@
                             <div class="flex items-center gap-3 w-32">
                                 <button 
                                     onclick="decrementQuantity()"
-                                    class="w-10 h-10 border border-gray-300 hover:border-black flex items-center justify-center transition-colors"
+                                    class="w-10 h-10 border border-sage hover:border-sage-dark flex items-center justify-center transition-colors"
                                 >
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
@@ -240,12 +240,12 @@
                                     value="1"
                                     min="1"
                                     max="{{ $product->stock }}"
-                                    class="w-full text-center border border-gray-300 py-2"
+                                    class="w-full text-center border border-sage py-2 focus:border-sage-dark focus:ring-2 focus:ring-sage focus:ring-opacity-20"
                                 >
                                 
                                 <button 
                                     onclick="incrementQuantity()"
-                                    class="w-10 h-10 border border-gray-300 hover:border-black flex items-center justify-center transition-colors"
+                                    class="w-10 h-10 border border-sage hover:border-sage-dark flex items-center justify-center transition-colors"
                                 >
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
@@ -261,7 +261,7 @@
                             <button 
                                 data-add-to-cart
                                 data-product-id="{{ $product->id }}"
-                                class="w-full bg-black text-white hover:bg-gray-900 px-10 py-4 text-base font-medium transition-colors duration-200 flex items-center justify-center"
+                                class="w-full bg-sage text-white hover:bg-sage-dark px-10 py-4 text-base font-medium transition-colors duration-200 flex items-center justify-center shadow-md hover:shadow-lg"
                             >
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
@@ -279,38 +279,38 @@
 
                         <a 
                             href="{{ route('products.index') }}" 
-                            class="block w-full text-center bg-white text-black hover:bg-gray-50 px-10 py-4 text-base font-medium border border-black transition-colors duration-200"
+                            class="block w-full text-center bg-white text-sage-dark hover:bg-sage-light px-10 py-4 text-base font-medium border border-sage transition-colors duration-200"
                         >
                             Continuar comprando
                         </a>
                     </div>
 
                     <!-- Características -->
-                    <div class="bg-gray-50 border border-gray-200 p-8">
-                        <h3 class="text-sm uppercase tracking-wider text-black mb-4 font-medium">
+                    <div class="bg-sage-light border border-sage p-8">
+                        <h3 class="text-sm uppercase tracking-wider text-sage-dark mb-4 font-medium">
                             Características
                         </h3>
-                        <ul class="space-y-3 text-sm text-gray-600">
+                        <ul class="space-y-3 text-sm text-gray-700">
                             <li class="flex items-start">
-                                <svg class="w-5 h-5 text-black mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-5 h-5 text-sage-dark mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                 </svg>
                                 <span>Envío gratis en pedidos superiores a $50</span>
                             </li>
                             <li class="flex items-start">
-                                <svg class="w-5 h-5 text-black mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-5 h-5 text-sage-dark mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                 </svg>
                                 <span>Garantía de devolución de 30 días</span>
                             </li>
                             <li class="flex items-start">
-                                <svg class="w-5 h-5 text-black mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-5 h-5 text-sage-dark mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                 </svg>
                                 <span>Productos 100% naturales</span>
                             </li>
                             <li class="flex items-start">
-                                <svg class="w-5 h-5 text-black mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-5 h-5 text-sage-dark mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                 </svg>
                                 <span>Soporte de nutricionistas certificados</span>
@@ -323,7 +323,7 @@
     </section>
 
     <!-- Detalles adicionales (acordeón) -->
-    <section class="py-16 bg-gray-50 border-t border-gray-100">
+    <section class="py-16 bg-white border-t border-gray-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="max-w-4xl">
                 <!-- Beneficios -->
@@ -374,13 +374,13 @@
 
     <!-- Productos Relacionados -->
     @if($relatedProducts->count() > 0)
-        <section class="py-24 lg:py-32 bg-white border-t border-gray-100">
+        <section class="py-24 lg:py-32 bg-beige border-t border-gray-200">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="mb-12">
                     <h2 class="text-3xl sm:text-4xl font-light text-black mb-3 tracking-tight">
                         Productos relacionados
                     </h2>
-                    <p class="text-base text-gray-500 font-light">
+                    <p class="text-base text-gray-600 font-light">
                         También te podrían interesar
                     </p>
                 </div>
