@@ -37,7 +37,7 @@
                     <a href="#nutricionistas" class="text-sm text-gray-600 hover:text-black transition-colors duration-200">
                         Nutricionistas
                     </a>
-                    <a href="#recursos" class="text-sm text-gray-600 hover:text-black transition-colors duration-200">
+                    <a href="{{ route('resources.index') }}" class="text-sm text-gray-600 hover:text-black transition-colors duration-200">
                         Recursos
                     </a>
                     <a href="{{ route('services.index') }}" class="text-sm text-gray-600 hover:text-black transition-colors duration-200">
@@ -58,6 +58,15 @@
                     </a>
                     
                     @auth
+                        @if(auth()->user()->role === 'admin' || auth()->user()->role === 'nutritionist')
+                            <a href="{{ route('dashboard') }}" class="text-sm text-gray-600 hover:text-black transition-colors duration-200">
+                                Dashboard
+                            </a>
+                        @else
+                            <a href="{{ route('profile.edit') }}" class="text-sm text-gray-600 hover:text-black transition-colors duration-200">
+                                Mi Perfil
+                            </a>
+                        @endif
                         <form method="POST" action="{{ route('logout') }}" class="inline">
                             @csrf
                             <button type="submit" class="text-sm text-gray-600 hover:text-black transition-colors duration-200">
@@ -419,7 +428,7 @@
                     <ul class="space-y-2 text-xs font-light">
                         <li><a href="{{ route('services.index') }}" class="hover:text-white transition-colors duration-200">Consultas</a></li>
                         <li><a href="#nutricionistas" class="hover:text-white transition-colors duration-200">Nutricionistas</a></li>
-                        <li><a href="#recursos" class="hover:text-white transition-colors duration-200">Recursos</a></li>
+                        <li><a href="{{ route('resources.index') }}" class="hover:text-white transition-colors duration-200">Recursos</a></li>
                     </ul>
                 </div>
 

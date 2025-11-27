@@ -14,6 +14,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\ResourceController;
 
 Route::get('/', function () {
     $featuredProducts = \App\Models\Product::where('is_featured', true)
@@ -36,8 +37,8 @@ Route::get('/dashboard', function () {
     return match ($user->role) {
         'admin' => redirect()->route('admin.dashboard'),
         'nutritionist' => redirect()->route('nutritionist.dashboard'),
-        'client' => redirect()->route('client.dashboard'),
-        default => view('dashboard')
+        'client' => redirect('/'), // Los clientes van a la página principal
+        default => redirect('/') // Por defecto, ir a la página principal
     };
 })->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -47,8 +48,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Dashboard para clientes
-Route::middleware(['auth', 'role:client'])->get('/client/dashboard', [ClientController::class, 'index'])->name('client.dashboard');
+// Dashboard para clientes (deshabilitado - los clientes usan la web principal)
+// Route::middleware(['auth', 'role:client'])->get('/client/dashboard', [ClientController::class, 'index'])->name('client.dashboard');
 
 // ==========================================
 // RUTAS PÚBLICAS (sin autenticación)
@@ -65,6 +66,11 @@ Route::get('/productos/{product:slug}', [ProductController::class, 'show'])->nam
 // Servicios
 Route::get('/servicios', [ServiceController::class, 'index'])->name('services.index');
 Route::get('/servicios/{service:slug}', [ServiceController::class, 'show'])->name('services.show');
+
+// Recursos (Recetas, Consejos, Artículos, Guías)
+Route::get('/recursos', [ResourceController::class, 'index'])->name('resources.index');
+Route::get('/recursos/{slug}', [ResourceController::class, 'show'])->name('resources.show');
+Route::get('/recursos/{slug}/descargar', [ResourceController::class, 'download'])->name('resources.download');
 
 // Carrito
 Route::get('/carrito', [CartController::class, 'index'])->name('cart.index');
@@ -154,6 +160,9 @@ Route::middleware(['auth', 'role:nutritionist,admin'])->prefix('nutricionista')-
     Route::post('/categorias', [CategoryController::class, 'store'])->name('nutritionist.categories.store');
     Route::put('/categorias/{category}', [CategoryController::class, 'update'])->name('nutritionist.categories.update');
     Route::delete('/categorias/{category}', [CategoryController::class, 'destroy'])->name('nutritionist.categories.destroy');
+    
+    // Gestión de Recursos
+    Route::resource('recursos', \App\Http\Controllers\Admin\ResourceController::class, ['as' => 'nutritionist']);
 });
 
 // ==========================================
@@ -190,6 +199,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::post('/categorias', [CategoryController::class, 'store'])->name('admin.categories.store');
     Route::put('/categorias/{category}', [CategoryController::class, 'update'])->name('admin.categories.update');
     Route::delete('/categorias/{category}', [CategoryController::class, 'destroy'])->name('admin.categories.destroy');
+    
+    // Gestión de Recursos
+    Route::resource('recursos', \App\Http\Controllers\Admin\ResourceController::class, ['as' => 'admin']);
     
     // Gestión de Pedidos
     Route::get('/pedidos', [OrderController::class, 'adminIndex'])->name('admin.orders.index');

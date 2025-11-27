@@ -45,6 +45,9 @@
                     <a href="{{ route('admin.reviews.index') }}" class="text-sm {{ request()->routeIs('admin.reviews.*') ? 'text-black border-b border-black' : 'text-gray-500 hover:text-black' }} pb-1 transition-colors duration-200">
                         Reseñas
                     </a>
+                    <a href="{{ route('admin.recursos.index') }}" class="text-sm {{ request()->routeIs('admin.recursos.*') ? 'text-black border-b border-black' : 'text-gray-500 hover:text-black' }} pb-1 transition-colors duration-200">
+                        Recursos
+                    </a>
                 </nav>
             </div>
             
