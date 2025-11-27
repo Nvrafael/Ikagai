@@ -15,30 +15,58 @@
     <header class="bg-white border-b border-gray-100 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
                 <div class="flex-shrink-0">
                     <a href="/" class="text-xl font-light tracking-tight text-black">
                         IKIGAI
                     </a>
                 </div>
 
+                <!-- Navigation -->
                 <nav class="hidden md:flex space-x-12">
                     <a href="{{ route('products.index') }}" class="text-sm text-gray-600 hover:text-black transition-colors duration-200">
                         Productos
+                    </a>
+                    <a href="/#nutricionistas" class="text-sm text-gray-600 hover:text-black transition-colors duration-200">
+                        Nutricionistas
+                    </a>
+                    <a href="/#recursos" class="text-sm text-gray-600 hover:text-black transition-colors duration-200">
+                        Recursos
                     </a>
                     <a href="{{ route('services.index') }}" class="text-sm text-gray-600 hover:text-black transition-colors duration-200">
                         Servicios
                     </a>
                 </nav>
 
+                <!-- Auth Buttons -->
                 <div class="flex items-center space-x-6">
-                    <a href="{{ route('cart.index') }}" class="relative text-black">
+                    <!-- Carrito -->
+                    <a href="{{ route('cart.index') }}" class="relative text-black transition-colors duration-200">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
                         </svg>
-                        <span id="cart-badge" class="absolute -top-2 -right-2 bg-sage text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+                        <span id="cart-badge" class="absolute -top-2 -right-2 bg-black text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-medium">
                             {{ count($cartItems) }}
                         </span>
                     </a>
+                    
+                    @auth
+                        <form method="POST" action="{{ route('logout') }}" class="inline">
+                            @csrf
+                            <button type="submit" class="text-sm text-gray-600 hover:text-black transition-colors duration-200">
+                                Cerrar sesión
+                            </button>
+                        </form>
+                    @else
+                        <a href="{{ route('login') }}" class="text-sm text-gray-600 hover:text-black transition-colors duration-200">
+                            Iniciar sesión
+                        </a>
+                        @if (Route::has('register'))
+                            <a href="{{ route('register') }}" class="bg-black text-white hover:bg-gray-900 px-6 py-2 text-sm font-medium transition-colors duration-200">
+                                Registrarse
+                            </a>
+                        @endif
+                    @endauth
                 </div>
             </div>
         </div>

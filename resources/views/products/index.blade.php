@@ -47,6 +47,16 @@
 
                 <!-- Auth Buttons -->
                 <div class="flex items-center space-x-6">
+                    <!-- Carrito -->
+                    <a href="{{ route('cart.index') }}" class="relative text-gray-600 hover:text-black transition-colors duration-200">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                        <span id="cart-badge" class="hidden absolute -top-2 -right-2 bg-black text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-medium">
+                            0
+                        </span>
+                    </a>
+                    
                     @auth
                         <a href="{{ route('dashboard') }}" class="text-sm text-gray-600 hover:text-black transition-colors duration-200">
                             Dashboard
@@ -171,7 +181,7 @@
     </section>
 
     <!-- Grid de Productos -->
-    <section class="py-16 lg:py-20 bg-beige">
+    <section class="py-16 lg:py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
             @if($products->count() > 0)
@@ -313,15 +323,15 @@
     </section>
 
     <!-- CTA Section -->
-    <section class="py-24 lg:py-32 bg-white border-t border-gray-200">
+    <section class="py-24 lg:py-32 bg-sage border-t border-sage-dark">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-4xl sm:text-5xl font-light text-black mb-6 tracking-tight">
+            <h2 class="text-4xl sm:text-5xl font-light text-white mb-6 tracking-tight">
                 ¿Necesitas ayuda personalizada?
             </h2>
-            <p class="text-lg text-gray-600 font-light mb-10 max-w-2xl mx-auto">
+            <p class="text-lg text-white font-light mb-10 max-w-2xl mx-auto opacity-90">
                 Nuestros nutricionistas certificados pueden ayudarte a elegir los mejores suplementos para tus objetivos
             </p>
-            <a href="/#nutricionistas" class="inline-flex items-center justify-center bg-sage text-white hover:bg-sage-dark px-10 py-4 text-base font-medium transition-colors duration-200 shadow-md hover:shadow-lg">
+            <a href="/#nutricionistas" class="inline-flex items-center justify-center bg-white text-sage-dark hover:bg-beige px-10 py-4 text-base font-medium transition-colors duration-200 shadow-md hover:shadow-lg">
                 Consultar con un nutricionista
                 <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
@@ -377,6 +387,31 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        // Cargar badge del carrito al inicio
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCartBadge();
+        });
+
+        // Cargar badge del carrito
+        async function loadCartBadge() {
+            try {
+                const response = await fetch('/carrito/count');
+                const data = await response.json();
+                
+                if (data.success && data.total_items > 0) {
+                    const badge = document.querySelector('#cart-badge');
+                    if (badge) {
+                        badge.textContent = data.total_items;
+                        badge.classList.remove('hidden');
+                    }
+                }
+            } catch (error) {
+                console.error('Error al cargar el carrito:', error);
+            }
+        }
+    </script>
 
 </body>
 </html>
