@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -171,6 +172,48 @@ class ProductController extends Controller
 
         return redirect()->route('admin.products.index')
             ->with('success', 'Producto eliminado exitosamente.');
+    }
+
+    /**
+     * Eliminar una imagen individual del producto
+     */
+    public function removeImage(Request $request, Product $product)
+    {
+        $validated = $request->validate([
+            'image' => 'required|string'
+        ]);
+
+        $imagePath = $validated['image'];
+        $images = $product->images ?? [];
+
+        // Buscar y eliminar la imagen del array
+        $imageIndex = array_search($imagePath, $images);
+        
+        if ($imageIndex !== false) {
+            // Eliminar el archivo físico
+            if (Storage::disk('public')->exists($imagePath)) {
+                Storage::disk('public')->delete($imagePath);
+            }
+
+            // Eliminar del array
+            unset($images[$imageIndex]);
+            
+            // Reindexar el array
+            $images = array_values($images);
+
+            // Actualizar el producto
+            $product->update(['images' => $images]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Imagen eliminada correctamente'
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Imagen no encontrada'
+        ], 404);
     }
 }
 

@@ -41,9 +41,6 @@
                     <a href="{{ route('resources.index') }}" class="text-sm text-gray-600 hover:text-black transition-colors duration-200">
                         Recursos
                     </a>
-                    <a href="{{ route('services.index') }}" class="text-sm text-gray-600 hover:text-black transition-colors duration-200">
-                        Servicios
-                    </a>
                 </nav>
 
                 <!-- Auth Buttons -->
@@ -473,6 +470,7 @@
                     <ul class="space-y-2 text-xs font-light">
                         <li><a href="#" class="hover:text-white transition-colors duration-200">Términos</a></li>
                         <li><a href="#" class="hover:text-white transition-colors duration-200">Privacidad</a></li>
+                        <li><a href="{{ route('cookies.policy') }}" class="hover:text-white transition-colors duration-200">Cookies</a></li>
                         <li><a href="#" class="hover:text-white transition-colors duration-200">Contacto</a></li>
                     </ul>
                 </div>
@@ -620,6 +618,9 @@
             }, 3000);
         }
     </script>
+
+    <!-- Cookie Banner -->
+    @include('components.cookie-banner')
 
 </body>
 </html>

@@ -15,6 +15,7 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ResourceController;
+use App\Http\Controllers\CookieConsentController;
 
 Route::get('/', function () {
     $featuredProducts = \App\Models\Product::where('is_featured', true)
@@ -48,8 +49,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Dashboard para clientes (deshabilitado - los clientes usan la web principal)
-// Route::middleware(['auth', 'role:client'])->get('/client/dashboard', [ClientController::class, 'index'])->name('client.dashboard');
+
 
 // ==========================================
 // RUTAS PÚBLICAS (sin autenticación)
@@ -88,6 +88,15 @@ Route::get('/nutricionista', function() {
     
     return view('nutricionista', compact('service'));
 })->name('nutritionist.profile');
+
+// Política de Cookies
+Route::get('/politica-de-cookies', function() {
+    return view('cookies-policy');
+})->name('cookies.policy');
+
+// API de Cookies
+Route::post('/cookies/consent', [CookieConsentController::class, 'update'])->name('cookies.update');
+Route::get('/cookies/status', [CookieConsentController::class, 'status'])->name('cookies.status');
 
 // ==========================================
 // RUTAS AUTENTICADAS (requieren login)
@@ -189,6 +198,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
         return view('admin.products.edit', compact('product', 'categories')); 
     })->name('admin.products.edit');
     Route::put('/productos/{product}', [ProductController::class, 'update'])->name('admin.products.update');
+    Route::post('/productos/{product}/remove-image', [ProductController::class, 'removeImage'])->name('admin.products.removeImage');
     Route::delete('/productos/{product}', [ProductController::class, 'destroy'])->name('admin.products.destroy');
     
     // Gestión de Categorías

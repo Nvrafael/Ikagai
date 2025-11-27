@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $resource->title }} - IKIGAI</title>
     <meta name="description" content="{{ $resource->excerpt ?? Str::limit(strip_tags($resource->content), 160) }}">
 
@@ -28,7 +29,6 @@
                     <a href="{{ route('products.index') }}" class="text-sm text-gray-600 hover:text-black transition-colors duration-200">Productos</a>
                     <a href="/#nutricionistas" class="text-sm text-gray-600 hover:text-black transition-colors duration-200">Nutricionistas</a>
                     <a href="{{ route('resources.index') }}" class="text-sm text-black font-medium transition-colors duration-200">Recursos</a>
-                    <a href="{{ route('services.index') }}" class="text-sm text-gray-600 hover:text-black transition-colors duration-200">Servicios</a>
                 </nav>
                 <div class="flex items-center space-x-6">
                     <a href="{{ route('cart.index') }}" class="relative text-gray-600 hover:text-black transition-colors duration-200">
@@ -294,6 +294,7 @@
                     <ul class="space-y-2 text-xs font-light">
                         <li><a href="#" class="hover:text-white transition-colors duration-200">Términos</a></li>
                         <li><a href="#" class="hover:text-white transition-colors duration-200">Privacidad</a></li>
+                        <li><a href="{{ route('cookies.policy') }}" class="hover:text-white transition-colors duration-200">Cookies</a></li>
                         <li><a href="#" class="hover:text-white transition-colors duration-200">Contacto</a></li>
                     </ul>
                 </div>
@@ -326,6 +327,9 @@
             }
         }
     </script>
+
+    <!-- Cookie Banner -->
+    @include('components.cookie-banner')
 
 </body>
 </html>

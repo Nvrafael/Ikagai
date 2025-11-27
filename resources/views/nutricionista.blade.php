@@ -72,9 +72,6 @@
                     <a href="{{ route('resources.index') }}" class="text-sm text-gray-600 hover:text-black transition-colors duration-200">
                         Recursos
                     </a>
-                    <a href="{{ route('services.index') }}" class="text-sm text-gray-600 hover:text-black transition-colors duration-200">
-                        Servicios
-                    </a>
                 </nav>
 
                 <!-- Auth Buttons -->
@@ -145,14 +142,12 @@
                 <!-- Imagen y datos principales -->
                 <div class="fade-in-up delay-1">
                     <!-- Foto profesional -->
-                    <div class="mb-8 bg-sage-light p-12 border border-sage flex items-center justify-center">
-                        <div class="relative">
-                            <!-- Avatar placeholder - puedes reemplazar con imagen real -->
-                            <div class="w-64 h-64 bg-sage flex items-center justify-center text-white">
-                                <svg class="w-32 h-32" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                                </svg>
-                            </div>
+                    <div class="mb-8 bg-sage-light p-8 border border-sage flex items-center justify-center">
+                        <div class="relative w-full">
+                            <!-- Imagen del nutricionista -->
+                            <img src="{{ asset('images/nutritionist-photo.jpg') }}" 
+                                 alt="Paco Villar Cantalejo - Nutricionista Certificado" 
+                                 class="w-full h-auto object-cover rounded-sm">
                         </div>
                     </div>
 
@@ -635,6 +630,7 @@
                     <ul class="space-y-2 text-xs font-light">
                         <li><a href="#" class="hover:text-white transition-colors duration-200">Términos</a></li>
                         <li><a href="#" class="hover:text-white transition-colors duration-200">Privacidad</a></li>
+                        <li><a href="{{ route('cookies.policy') }}" class="hover:text-white transition-colors duration-200">Cookies</a></li>
                         <li><a href="#contacto" class="hover:text-white transition-colors duration-200">Contacto</a></li>
                     </ul>
                 </div>
@@ -737,6 +733,9 @@
             });
         }
     </script>
+
+    <!-- Cookie Banner -->
+    @include('components.cookie-banner')
 
 </body>
 </html>

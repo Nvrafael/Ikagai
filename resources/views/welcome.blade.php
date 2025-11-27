@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>IKIGAI - Encuentra tu equilibrio perfecto</title>
     <meta name="description" content="Descubre el equilibrio perfecto entre tu salud y bienestar con nuestros suplementos naturales y orientación experta.">
 
@@ -39,9 +40,6 @@
                     </a>
                     <a href="{{ route('resources.index') }}" class="text-sm text-gray-600 hover:text-black transition-colors duration-200">
                         Recursos
-                    </a>
-                    <a href="{{ route('services.index') }}" class="text-sm text-gray-600 hover:text-black transition-colors duration-200">
-                        Servicios
                     </a>
                 </nav>
 
@@ -165,7 +163,7 @@
                             <!-- Imagen del producto -->
                             <div class="h-80 flex items-center justify-center mb-6 bg-gray-50">
                                 @if($product->images && count($product->images) > 0)
-                                    <img src="{{ $product->images[0] }}" alt="{{ $product->name }}" class="h-full w-auto object-contain opacity-90 group-hover:opacity-100 transition-opacity duration-200">
+                                    <img src="{{ asset('storage/' . $product->images[0]) }}" alt="{{ $product->name }}" class="h-full w-auto object-contain opacity-90 group-hover:opacity-100 transition-opacity duration-200">
                                 @else
                                     <div class="w-24 h-24 border-2 border-gray-200 flex items-center justify-center">
                                         <svg class="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -251,30 +249,34 @@
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1">
                 @forelse($nutritionists as $nutritionist)
-                    <div class="group bg-white border border-sage hover:border-sage-dark transition-colors duration-200 p-12">
+                    <div class="group bg-white border border-sage hover:border-sage-dark transition-colors duration-200 p-12 flex flex-col">
                         <!-- Avatar -->
-                        <div class="mb-8">
-                            <div class="w-20 h-20 bg-sage text-white flex items-center justify-center">
-                                <span class="text-2xl font-light">{{ $nutritionist->initials() }}</span>
+                        <div class="mb-12">
+                            <div class="w-48 h-48 overflow-hidden mx-auto">
+                                <img src="{{ asset('images/nutritionist-photo.jpg') }}" 
+                                     alt="{{ $nutritionist->name }}" 
+                                     class="w-full h-full object-cover">
                             </div>
                         </div>
                         
                         <!-- Info -->
-                        <h3 class="text-xl font-normal text-black mb-2">
-                            {{ $nutritionist->name }}
-                        </h3>
-                        
-                        <p class="text-xs text-sage-dark uppercase tracking-wider mb-8">
-                            Nutricionista certificado
-                        </p>
-                        
-                        <!-- Botón -->
-                        <a href="{{ route('nutritionist.profile') }}" class="inline-flex items-center text-sage-dark hover:text-sage text-sm font-medium border-b border-sage-dark hover:border-sage transition-colors duration-200">
-                            Ver perfil
-                            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                            </svg>
-                        </a>
+                        <div class="mt-auto text-center">
+                            <h3 class="text-xl font-normal text-black mb-2">
+                                {{ $nutritionist->name }}
+                            </h3>
+                            
+                            <p class="text-xs text-sage-dark uppercase tracking-wider mb-8">
+                                Nutricionista certificado
+                            </p>
+                            
+                            <!-- Botón -->
+                            <a href="{{ route('nutritionist.profile') }}" class="inline-flex items-center text-sage-dark hover:text-sage text-sm font-medium border-b border-sage-dark hover:border-sage transition-colors duration-200">
+                                Ver perfil
+                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                                </svg>
+                            </a>
+                        </div>
                     </div>
                 @empty
                     <div class="col-span-full text-center py-24 border border-gray-200 bg-white">
@@ -438,6 +440,7 @@
                     <ul class="space-y-2 text-xs font-light">
                         <li><a href="#" class="hover:text-white transition-colors duration-200">Términos</a></li>
                         <li><a href="#" class="hover:text-white transition-colors duration-200">Privacidad</a></li>
+                        <li><a href="{{ route('cookies.policy') }}" class="hover:text-white transition-colors duration-200">Cookies</a></li>
                         <li><a href="#" class="hover:text-white transition-colors duration-200">Contacto</a></li>
                     </ul>
                 </div>
@@ -567,6 +570,9 @@
             }, 3000);
         }
     </script>
+
+    <!-- Cookie Banner -->
+    @include('components.cookie-banner')
 
     </body>
 </html>

@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Productos - IKIGAI</title>
     <meta name="description" content="Explora nuestro catálogo completo de suplementos naturales para tu salud y bienestar.">
 
@@ -39,9 +40,6 @@
                     </a>
                     <a href="{{ route('resources.index') }}" class="text-sm text-gray-600 hover:text-black transition-colors duration-200">
                         Recursos
-                    </a>
-                    <a href="{{ route('services.index') }}" class="text-sm text-gray-600 hover:text-black transition-colors duration-200">
-                        Servicios
                     </a>
                 </nav>
 
@@ -89,8 +87,16 @@
     </header>
 
     <!-- Hero Section -->
-    <section class="bg-beige py-20 lg:py-24 border-b border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section class="relative bg-beige py-20 lg:py-24 border-b border-gray-200 overflow-hidden">
+        <!-- Imagen de fondo con opacidad -->
+        <div class="absolute inset-0 z-0">
+            <img src="{{ asset('images/products-hero-bg.jpg') }}" 
+                 alt="Productos naturales" 
+                 class="w-full h-full object-cover opacity-20">
+        </div>
+        
+        <!-- Contenido -->
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="max-w-3xl">
                 <h1 class="text-5xl sm:text-6xl lg:text-7xl font-light text-black mb-6 tracking-tight">
                     Productos
@@ -383,6 +389,7 @@
                     <ul class="space-y-2 text-xs font-light">
                         <li><a href="#" class="hover:text-white transition-colors duration-200">Términos</a></li>
                         <li><a href="#" class="hover:text-white transition-colors duration-200">Privacidad</a></li>
+                        <li><a href="{{ route('cookies.policy') }}" class="hover:text-white transition-colors duration-200">Cookies</a></li>
                         <li><a href="#" class="hover:text-white transition-colors duration-200">Contacto</a></li>
                     </ul>
                 </div>
@@ -418,6 +425,9 @@
             }
         }
     </script>
+
+    <!-- Cookie Banner -->
+    @include('components.cookie-banner')
 
 </body>
 </html>

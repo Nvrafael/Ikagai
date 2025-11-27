@@ -107,9 +107,15 @@
             <!-- Imágenes -->
             <div>
                 <label class="block text-sm font-medium text-black mb-2">Imágenes del Producto</label>
-                <input type="file" name="images[]" class="w-full px-4 py-3 border border-gray-200 focus:border-black focus:outline-none transition-colors duration-200" multiple accept="image/*">
+                <input type="file" name="images[]" id="imageInput" class="w-full px-4 py-3 border border-gray-200 focus:border-black focus:outline-none transition-colors duration-200" multiple accept="image/*">
                 <p class="mt-1 text-xs text-gray-500">Puedes seleccionar múltiples imágenes</p>
                 @error('images')<span class="block mt-1 text-xs text-red-600">{{ $message }}</span>@enderror
+                
+                <!-- Contenedor de previsualización -->
+                <div id="imagePreviewContainer" class="mt-4 hidden">
+                    <p class="text-sm font-medium text-black mb-2">Imágenes seleccionadas:</p>
+                    <div id="imagePreviewGrid" class="grid grid-cols-4 gap-4"></div>
+                </div>
             </div>
 
             <!-- Opciones -->
@@ -137,4 +143,72 @@
         </div>
     </form>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const imageInput = document.getElementById('imageInput');
+    const previewContainer = document.getElementById('imagePreviewContainer');
+    const previewGrid = document.getElementById('imagePreviewGrid');
+    let selectedFiles = [];
+
+    imageInput.addEventListener('change', function(e) {
+        const files = Array.from(e.target.files);
+        
+        if (files.length > 0) {
+            selectedFiles = files;
+            updatePreview();
+            previewContainer.classList.remove('hidden');
+        } else {
+            previewContainer.classList.add('hidden');
+        }
+    });
+
+    function updatePreview() {
+        previewGrid.innerHTML = '';
+        
+        selectedFiles.forEach((file, index) => {
+            const reader = new FileReader();
+            
+            reader.onload = function(event) {
+                const div = document.createElement('div');
+                div.className = 'relative group';
+                div.innerHTML = `
+                    <img src="${event.target.result}" alt="Preview ${index + 1}" class="w-full h-32 object-cover border border-gray-200">
+                    <button type="button" 
+                            onclick="removePreviewImage(${index})"
+                            class="absolute top-2 right-2 bg-red-600 text-white p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-700">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                    <div class="absolute bottom-2 left-2 bg-black bg-opacity-70 text-white px-2 py-1 text-xs">
+                        ${file.name}
+                    </div>
+                `;
+                previewGrid.appendChild(div);
+            };
+            
+            reader.readAsDataURL(file);
+        });
+    }
+
+    window.removePreviewImage = function(index) {
+        selectedFiles.splice(index, 1);
+        
+        // Actualizar el input file
+        const dataTransfer = new DataTransfer();
+        selectedFiles.forEach(file => {
+            dataTransfer.items.add(file);
+        });
+        imageInput.files = dataTransfer.files;
+        
+        if (selectedFiles.length === 0) {
+            previewContainer.classList.add('hidden');
+        } else {
+            updatePreview();
+        }
+    };
+});
+</script>
+
 @endsection

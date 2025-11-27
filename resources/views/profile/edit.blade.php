@@ -39,9 +39,6 @@
                     <a href="{{ route('resources.index') }}" class="text-sm text-gray-600 hover:text-black transition-colors duration-200">
                         Recursos
                     </a>
-                    <a href="{{ route('services.index') }}" class="text-sm text-gray-600 hover:text-black transition-colors duration-200">
-                        Servicios
-                    </a>
                 </nav>
 
                 <!-- Auth Buttons -->
@@ -342,6 +339,9 @@
             }
         }
     </script>
+
+    <!-- Cookie Banner -->
+    @include('components.cookie-banner')
 
 </body>
 </html>

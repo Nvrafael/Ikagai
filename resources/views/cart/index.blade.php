@@ -33,9 +33,6 @@
                     <a href="{{ route('resources.index') }}" class="text-sm text-gray-600 hover:text-black transition-colors duration-200">
                         Recursos
                     </a>
-                    <a href="{{ route('services.index') }}" class="text-sm text-gray-600 hover:text-black transition-colors duration-200">
-                        Servicios
-                    </a>
                 </nav>
 
                 <!-- Auth Buttons -->
@@ -111,7 +108,7 @@
                             <!-- Imagen -->
                             <div class="w-24 h-24 flex-shrink-0 bg-gray-50 flex items-center justify-center">
                                 @if($item['product']->images && count($item['product']->images) > 0)
-                                    <img src="{{ $item['product']->images[0] }}" alt="{{ $item['product']->name }}" class="w-full h-full object-contain">
+                                    <img src="{{ asset('storage/' . $item['product']->images[0]) }}" alt="{{ $item['product']->name }}" class="w-full h-full object-contain">
                                 @else
                                     <svg class="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
@@ -341,6 +338,10 @@
             }, 3000);
         }
     </script>
+
+    <!-- Cookie Banner -->
+    @include('components.cookie-banner')
+
 </body>
 </html>
 
