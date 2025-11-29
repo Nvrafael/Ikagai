@@ -9,13 +9,33 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 
+/**
+ * Modelo de Usuario
+ * 
+ * Representa a los usuarios de la aplicación con sus diferentes roles
+ * (cliente, nutricionista, administrador). Gestiona autenticación,
+ * autorización, relaciones con pedidos, reservas, reseñas y mensajes.
+ * Incluye autenticación de dos factores mediante Laravel Fortify.
+ * 
+ * @package App\Models
+ * @property int $id
+ * @property string $name
+ * @property string $email
+ * @property string $password
+ * @property string $role
+ * @property bool|null $cookie_consent
+ * @property \Illuminate\Support\Carbon|null $cookie_consent_date
+ * @property \Illuminate\Support\Carbon|null $email_verified_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ */
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, TwoFactorAuthenticatable;
 
     /**
-     * The attributes that are mass assignable.
+     * Los atributos que se pueden asignar masivamente.
      *
      * @var list<string>
      */
@@ -29,7 +49,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
+     * Los atributos que deben ocultarse en la serialización.
      *
      * @var list<string>
      */
@@ -39,7 +59,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * Obtiene los atributos que deben ser convertidos a tipos nativos.
      *
      * @return array<string, string>
      */
@@ -53,19 +73,32 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the user's initials
+     * Obtiene las iniciales del nombre del usuario.
+     * 
+     * Extrae las primeras letras de las dos primeras palabras del nombre.
+     * Por ejemplo: "Juan Pérez" devuelve "JP"
+     * 
+     * @return string  Las iniciales del usuario
      */
     public function initials(): string
     {
         return Str::of($this->name)
-            ->explode(' ')
-            ->take(2)
-            ->map(fn ($word) => Str::substr($word, 0, 1))
-            ->implode('');
+            ->explode(' ')  // Dividir nombre por espacios
+            ->take(2)  // Tomar solo las dos primeras palabras
+            ->map(fn ($word) => Str::substr($word, 0, 1))  // Obtener primera letra de cada palabra
+            ->implode('');  // Unir las letras
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | Relaciones Eloquent
+    |--------------------------------------------------------------------------
+    */
+
     /**
-     * Relación con reseñas del usuario
+     * Obtiene todas las reseñas escritas por el usuario.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function reviews()
     {
@@ -73,7 +106,9 @@ class User extends Authenticatable
     }
 
     /**
-     * Relación con reservas del usuario
+     * Obtiene todas las reservas de servicios del usuario.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function bookings()
     {
@@ -81,7 +116,9 @@ class User extends Authenticatable
     }
 
     /**
-     * Relación con pedidos del usuario
+     * Obtiene todos los pedidos de productos del usuario.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function orders()
     {
@@ -89,7 +126,9 @@ class User extends Authenticatable
     }
 
     /**
-     * Relación con planes nutricionales del usuario
+     * Obtiene todos los planes nutricionales asignados al usuario.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function nutritionalPlans()
     {
@@ -97,7 +136,9 @@ class User extends Authenticatable
     }
 
     /**
-     * Mensajes enviados por el usuario
+     * Obtiene todos los mensajes enviados por el usuario.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function sentMessages()
     {
@@ -105,15 +146,25 @@ class User extends Authenticatable
     }
 
     /**
-     * Mensajes recibidos por el usuario
+     * Obtiene todos los mensajes recibidos por el usuario.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function receivedMessages()
     {
         return $this->hasMany(Message::class, 'receiver_id');
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | Métodos de Verificación de Roles
+    |--------------------------------------------------------------------------
+    */
+
     /**
-     * Verificar si el usuario es nutricionista
+     * Verifica si el usuario tiene el rol de nutricionista.
+     * 
+     * @return bool
      */
     public function isNutritionist()
     {
@@ -121,7 +172,9 @@ class User extends Authenticatable
     }
 
     /**
-     * Verificar si el usuario es cliente
+     * Verifica si el usuario tiene el rol de cliente.
+     * 
+     * @return bool
      */
     public function isClient()
     {
@@ -129,7 +182,9 @@ class User extends Authenticatable
     }
 
     /**
-     * Verificar si el usuario es administrador
+     * Verifica si el usuario tiene el rol de administrador.
+     * 
+     * @return bool
      */
     public function isAdmin()
     {

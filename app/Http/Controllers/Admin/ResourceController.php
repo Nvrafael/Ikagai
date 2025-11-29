@@ -10,9 +10,7 @@ use Illuminate\Support\Str;
 
 class ResourceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+   
     public function index(Request $request)
     {
         $query = Resource::with('author')->latest();
@@ -36,17 +34,13 @@ class ResourceController extends Controller
         return view('admin.resources.index', compact('resources'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+   
     public function create()
     {
         return view('admin.resources.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -108,25 +102,19 @@ class ResourceController extends Controller
                         ->with('success', 'Recurso creado exitosamente');
     }
 
-    /**
-     * Display the specified resource.
-     */
+   
     public function show(Resource $recurso)
     {
         return view('admin.resources.show', ['resource' => $recurso]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+   
     public function edit(Resource $recurso)
     {
         return view('admin.resources.edit', ['resource' => $recurso]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    
     public function update(Request $request, Resource $recurso)
     {
         $validated = $request->validate([
@@ -201,9 +189,7 @@ class ResourceController extends Controller
                         ->with('success', 'Recurso actualizado exitosamente');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    
     public function destroy(Resource $recurso)
     {
         // Eliminar archivos asociados

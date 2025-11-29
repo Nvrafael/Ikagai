@@ -4,10 +4,21 @@ namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
+/**
+ * Kernel HTTP de la Aplicación
+ * 
+ * Define los middleware HTTP que se ejecutan en cada solicitud.
+ * Organiza middleware en tres grupos: globales, grupos de rutas y middleware de ruta.
+ * 
+ * @package App\Http
+ */
 class Kernel extends HttpKernel
 {
     /**
-     * The application's global HTTP middleware stack.
+     * Middleware HTTP globales de la aplicación.
+     * 
+     * Estos middleware se ejecutan en cada solicitud HTTP a la aplicación,
+     * independientemente de la ruta o tipo de solicitud.
      *
      * @var array<int, class-string|string>
      */
@@ -21,7 +32,11 @@ class Kernel extends HttpKernel
     ];
 
     /**
-     * The application's route middleware groups.
+     * Grupos de middleware de rutas de la aplicación.
+     * 
+     * Define conjuntos de middleware que pueden ser asignados a grupos de rutas.
+     * 'web' se usa para rutas web con sesiones, cookies y CSRF.
+     * 'api' se usa para rutas API con autenticación stateless y rate limiting.
      *
      * @var array<string, array<int, class-string|string>>
      */
@@ -47,9 +62,11 @@ class Kernel extends HttpKernel
     ];
 
     /**
-     * The application's route middleware.
+     * Middleware de ruta de la aplicación.
      *
-     * These middleware may be assigned to routes or used individually.
+     * Estos middleware pueden ser asignados a rutas individuales o grupos de rutas.
+     * Proporcionan funcionalidades específicas como autenticación, autorización,
+     * rate limiting, verificación de email y control de roles personalizado.
      *
      * @var array<string, class-string|string>
      */
@@ -64,7 +81,7 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
 
-        // <-- Añade aquí tu middleware de roles
+        // Middleware personalizado para control de acceso basado en roles
         'role' => \App\Http\Middleware\RoleMiddleware::class,
     ];
 }
