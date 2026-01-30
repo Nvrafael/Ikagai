@@ -14,6 +14,8 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
+
 use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\CookieConsentController;
 
@@ -79,6 +81,14 @@ Route::put('/carrito/{productId}', [CartController::class, 'update'])->name('car
 Route::delete('/carrito/{productId}', [CartController::class, 'remove'])->name('cart.remove');
 Route::get('/carrito/count', [CartController::class, 'count'])->name('cart.count');
 Route::delete('/carrito', [CartController::class, 'clear'])->name('cart.clear');
+
+// Checkout
+Route::middleware('auth')->group(function () {
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+    Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
+    Route::get('/checkout/cancel', [CheckoutController::class, 'cancel'])->name('checkout.cancel');
+});
 
 // Página del nutricionista
 Route::get('/nutricionista', function() {

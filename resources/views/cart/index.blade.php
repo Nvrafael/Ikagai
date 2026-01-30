@@ -201,9 +201,9 @@
                             </div>
                         </div>
 
-                        <button class="w-full bg-sage text-white py-4 hover:bg-sage-dark transition-colors mb-3 shadow-md hover:shadow-lg">
+                        <a href="{{ route('checkout.index') }}" class="block text-center w-full bg-sage text-white py-4 hover:bg-sage-dark transition-colors mb-3 shadow-md hover:shadow-lg">
                             Proceder al Pago
-                        </button>
+                        </a>
                         
                         <a href="{{ route('products.index') }}" class="block text-center text-sm text-sage-dark hover:text-sage">
                             Continuar comprando

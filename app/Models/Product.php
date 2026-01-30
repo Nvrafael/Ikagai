@@ -137,5 +137,16 @@ class Product extends Model
     {
         return $this->stock >= $quantity;
     }
+
+    /**
+     * Reduce el stock del producto.
+     * 
+     * @param  int  $quantity  La cantidad a descontar
+     * @return bool
+     */
+    public function decrementStock($quantity)
+    {
+        return $this->decrement('stock', $quantity);
+    }
 }
 
